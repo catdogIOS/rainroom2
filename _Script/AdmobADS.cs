@@ -48,7 +48,7 @@ public class AdmobADS : MonoBehaviour {
         // Create an empty ad request.
         AdRequest request = new AdRequest.Builder().Build();
         // Load the rewarded ad with the request.
-        RewardedInterstitialAd.LoadAd("ca-app-pub-9179569099191885/5519050563", request, adLoadCallback);
+        RewardedInterstitialAd.LoadAd("ca-app-pub-9179569099191885/2021864778", request, adLoadCallback);
     }
 
 
