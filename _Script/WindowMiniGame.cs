@@ -385,6 +385,8 @@ public void OpenMiniGame()
             htm = htm + 2;
             PlayerPrefs.SetInt("milkadc", 0);
             PlayerPrefs.SetInt("setmilkadc", 0);
+            GM.GetComponent<AdmobADSMilk>().falsetoast();
+            GM.GetComponent<AdmobADSMilk>().Toast_contain3.SetActive(true);
         }
 
         PlayerPrefs.SetInt(str + "c", cm);
@@ -633,18 +635,13 @@ public void OpenMiniGame()
     public void MilkYesNo()
     {
         milkAdWin_obj.SetActive(true);
-        if (PlayerPrefs.GetInt("milkadc", 0) == 1)
-        {
-            milkad_btn.interactable = false;
-        }
-        else
-        {
-            milkad_btn.interactable = true;
-        }
 
     }
     public void MilkYes()
     {
+        GM.GetComponent<AdmobADSMilk>().falsetoast();
+        GM.GetComponent<AdmobADSMilk>().Toast_contain2.SetActive(true);
+        GM.GetComponent<AdmobADSMilk>().Toast_obj2.SetActive(true);
         milkAdWin_obj.SetActive(false);
         GetMilk();
     }
@@ -656,6 +653,5 @@ public void OpenMiniGame()
     public void MilkAd()
     {
         PlayerPrefs.SetInt("setmilkadc", 1);
-        milkad_btn.interactable = false;
     }
 }
