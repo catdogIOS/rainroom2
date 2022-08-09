@@ -751,6 +751,15 @@ public class MainShop : ShopHandler {
             funcBox_obj[5].SetActive(false);
         }
 
+        if (PlayerPrefs.GetInt("setputmap", 0) >= 1)
+        {
+            funcBox_obj[9].SetActive(true);
+        }
+        else
+        {
+            funcBox_obj[9].SetActive(false);
+        }
+
         shop_obj.SetActive(false);
         close_obj.SetActive(false);
         back_obj.SetActive(false);
@@ -825,8 +834,27 @@ public class MainShop : ShopHandler {
             funcBox_obj[7].GetComponent<Image>().sprite = funcBox_spr[15];
         }
 
+        if (PlayerPrefs.GetInt("putrug", 0) >= 1)
+        {
+            funcBox_obj[10].GetComponent<Image>().sprite = funcBox_spr[20];
+        }
+        else
+        {
+            funcBox_obj[10].GetComponent<Image>().sprite = funcBox_spr[21];
+        }
+
+        if (PlayerPrefs.GetInt("putmap", 0) >= 1)
+        {
+            funcBox_obj[9].GetComponent<Image>().sprite = funcBox_spr[18];
+        }
+        else
+        {
+            funcBox_obj[9].GetComponent<Image>().sprite = funcBox_spr[19];
+        }
+
 
     }
+
 
     public void BackMenuC()
     {
@@ -1176,6 +1204,79 @@ public class MainShop : ShopHandler {
     public void CloseFuncCabinet()
     {
         funcCabinet_obj.SetActive(false);
+    }
+
+    //러그 보관
+    public void PutRug()
+    {
+        if (PlayerPrefs.GetInt("place", 1) == 0)
+        {
+            if (GM.GetComponent<FirstRoomFunction>().rugImg_obj.activeSelf == true)
+            {
+                GM.GetComponent<FirstRoomFunction>().rugImg_obj.SetActive(false);
+                GM.GetComponent<FirstRoomFunction>().rugImg2_obj.SetActive(false);
+                PlayerPrefs.SetInt("putrug", 0);
+                funcBox_obj[10].GetComponent<Image>().sprite = funcBox_spr[21];
+            }
+            else
+            {
+                GM.GetComponent<FirstRoomFunction>().rugImg_obj.SetActive(true);
+                GM.GetComponent<FirstRoomFunction>().rugImg2_obj.SetActive(true);
+                PlayerPrefs.SetInt("putrug", 1);
+                funcBox_obj[10].GetComponent<Image>().sprite = funcBox_spr[20];
+            }
+
+        }
+        else
+        {
+            if (PlayerPrefs.GetInt("putrug", 1) == 1)
+            {
+                PlayerPrefs.SetInt("putrug", 0);
+                funcBox_obj[10].GetComponent<Image>().sprite = funcBox_spr[21];
+            }
+            else
+            {
+                PlayerPrefs.SetInt("putrug", 1);
+                funcBox_obj[10].GetComponent<Image>().sprite = funcBox_spr[20];
+            }
+
+        }
+    }
+
+    //지도 보관
+    public void PutMap()
+    {
+        if (PlayerPrefs.GetInt("place", 1) == 0)
+        {
+
+            if (GM.GetComponent<FirstRoomFunction>().map_obj.activeSelf == true)
+            {
+                GM.GetComponent<FirstRoomFunction>().map_obj.SetActive(false);
+                PlayerPrefs.SetInt("putmap", 0);
+                funcBox_obj[9].GetComponent<Image>().sprite = funcBox_spr[19];
+            }
+            else
+            {
+                GM.GetComponent<FirstRoomFunction>().map_obj.SetActive(true);
+                PlayerPrefs.SetInt("putmap", 1);
+                funcBox_obj[9].GetComponent<Image>().sprite = funcBox_spr[18];
+            }
+
+        }
+        else
+        {
+            if (PlayerPrefs.GetInt("putmap", 1) == 1)
+            {
+                PlayerPrefs.SetInt("putmap", 0);
+                funcBox_obj[9].GetComponent<Image>().sprite = funcBox_spr[19];
+            }
+            else
+            {
+                PlayerPrefs.SetInt("putmap", 1);
+                funcBox_obj[9].GetComponent<Image>().sprite = funcBox_spr[18];
+            }
+
+        }
     }
 
     public void putPageSet1()

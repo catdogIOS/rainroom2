@@ -64,6 +64,10 @@ public class MainBtnEvt : CavasData
     public Vector2 showHave_vet;
     public GameObject s_obj,b_obj;
 
+    //보물찾기
+    public GameObject[] tre_obj;
+    public GameObject treWin_obj, treDone_obj;
+
     //아이폰
     bool bPaused = false;
     //비
@@ -424,7 +428,8 @@ public class MainBtnEvt : CavasData
 		string str="";
 		if (c == PlayerPrefs.GetInt ("first", 0)) {
 
-			for (int i = 0; i < 16; i++) {
+            PlayerPrefs.SetInt("putrug", 1);
+            for (int i = 0; i < 16; i++) {
 				int a = Random.Range (0, 16);//0~15
 
 				switch (a) {
@@ -876,6 +881,31 @@ public class MainBtnEvt : CavasData
 
     }
 
+    //토스트
+    IEnumerator closetreToast()
+    {
+
+        PlayerPrefs.Save();
+
+        tspeed_txt.text = "다락방 벽에 뭔가 생겼다";
+        Color colorN;
+        colorN = new Color(1f, 1f, 1f);
+        colorN.a = Mathf.Lerp(0f, 1f, 1f);
+        speed_toast.GetComponent<Image>().color = colorN;
+        speed_toast.SetActive(true);
+
+        yield return new WaitForSeconds(2.5f);
+        for (float i = 1f; i > 0f; i -= 0.05f)
+        {
+            colorN.a = Mathf.Lerp(0f, 1f, i);
+            speed_toast.GetComponent<Image>().color = colorN;
+            yield return null;
+        }
+        speed_toast.SetActive(false);
+    }
+
+
+
 
     public void OpenHelpShop()
     {
@@ -1232,4 +1262,44 @@ public class MainBtnEvt : CavasData
         }
     }
 
+    //모은쪽지 확인
+    public void CheckTre()
+    {
+        int a = 0;
+        for (int i = 0; i < 6; i++)
+        {
+            if (PlayerPrefs.GetInt("gettre" + i, 0) == 1)
+            {
+                tre_obj[i].SetActive(true);
+                a++;
+            }
+        }
+        if (a >= 6)
+        {
+            treDone_obj.SetActive(true);
+            PlayerPrefs.SetInt("putmap", 1);
+            PlayerPrefs.SetInt("setputmap", 1);
+            if (PlayerPrefs.GetInt("place", 0) == 0)
+            {
+                if (GM == null)
+                {
+                    GM = GameObject.FindGameObjectWithTag("firstroomGM");
+                }
+                GM.GetComponent<FirstRoomFunction>().map_obj.SetActive(true);
+            }
+        }
+        treWin_obj.SetActive(true);
     }
+
+
+    public void CloseTre()
+    {
+        treWin_obj.SetActive(false);
+        if (PlayerPrefs.GetInt("putmap", 0) == 1)
+        {
+            StartCoroutine("closetreToast");
+        }
+    }
+
+
+}

@@ -47,6 +47,8 @@ public class CityFunction : CavasData
     //미리 씬을 불러오기
     AsyncOperation async;
 
+    public GameObject tre3_obj, tre4_obj;
+
     // Use this for initialization
     void Start () {
 
@@ -100,6 +102,16 @@ public class CityFunction : CavasData
         //외출중
         PlayerPrefs.SetInt("outorhome", 2);
         PlayerPrefs.Save();
+
+        //보물찾기
+        if (PlayerPrefs.GetInt("gettre3", 0) == 1)
+        {
+            tre3_obj.SetActive(false);
+        }
+        if (PlayerPrefs.GetInt("gettre4", 0) == 1)
+        {
+            tre4_obj.SetActive(false);
+        }
     }
 
     //외출업적
@@ -505,4 +517,27 @@ public class CityFunction : CavasData
             }
         }
     }
+
+    public void OpenTr3()
+    {
+        if (GMtag == null)
+        {
+            GMtag = GameObject.FindGameObjectWithTag("GMtag");
+        }
+        tre3_obj.SetActive(false);
+        PlayerPrefs.SetInt("gettre3", 1);
+        GMtag.GetComponent<MainBtnEvt>().CheckTre();
+    }
+
+    public void OpenTra4()
+    {
+        if (GMtag == null)
+        {
+            GMtag = GameObject.FindGameObjectWithTag("GMtag");
+        }
+        tre4_obj.SetActive(false);
+        PlayerPrefs.SetInt("gettre4", 1);
+        GMtag.GetComponent<MainBtnEvt>().CheckTre();
+    }
+
 }

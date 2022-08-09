@@ -100,8 +100,8 @@ public class FirstRoomFunction : CavasData {
     public Sprite[] bookTxt_spr;
     int booke_i=0;
 
-    public GameObject wScarf_obj, sHat_obj;
-    public GameObject window_season_obj;
+    public GameObject wScarf_obj, sHat_obj, map_obj, tre0_obj, tre1_obj;
+    public GameObject window_season_obj, mapWin_obj;
 
     public GameObject notice_obj, backagain_obj, backWhere_obj;
 
@@ -148,6 +148,30 @@ public class FirstRoomFunction : CavasData {
         {
             sHat_obj.SetActive(true);
         }
+
+        //러그
+        if (PlayerPrefs.GetInt("putrug", 0) == 1)
+        {
+            rugImg_obj.SetActive(true);
+            rugImg2_obj.SetActive(true);
+        }
+        else
+        {
+            rugImg_obj.SetActive(false);
+            rugImg2_obj.SetActive(false);
+        }
+
+        //보물지도
+        if (PlayerPrefs.GetInt("putmap", 0) == 1)
+        {
+            map_obj.SetActive(true);
+        }
+        else
+        {
+            map_obj.SetActive(false);
+        }
+
+
 
         /*
         //가을창문
@@ -244,6 +268,17 @@ public class FirstRoomFunction : CavasData {
 
         //낮밤
         setDay();
+
+        //보물찾기
+        if (PlayerPrefs.GetInt("gettre0", 0) == 1)
+        {
+            tre0_obj.SetActive(false);
+        }
+        if (PlayerPrefs.GetInt("gettre1", 0) == 1)
+        {
+            tre1_obj.SetActive(false);
+        }
+
     }
 
     public void OutAgainY()
@@ -1258,6 +1293,40 @@ public class FirstRoomFunction : CavasData {
                 PlayerPrefs.SetInt("dayday", 0);
             }
         }
+    }
+
+
+    public void OpenMap()
+    {
+        mapWin_obj.SetActive(true);
+    }
+
+    public void CloseMap()
+    {
+        mapWin_obj.SetActive(false);
+    }
+
+
+    public void OpenTra()
+    {
+        if (GMNotdistroy == null)
+        {
+            GMNotdistroy = GameObject.FindGameObjectWithTag("GMtag");
+        }
+        tre0_obj.SetActive(false);
+        PlayerPrefs.SetInt("gettre0", 1);
+        GMNotdistroy.GetComponent<MainBtnEvt>().CheckTre();
+    }
+
+    public void OpenTra1()
+    {
+        if (GMTag == null)
+        {
+            GMTag = GameObject.FindGameObjectWithTag("GMtag");
+        }
+        tre1_obj.SetActive(false);
+        PlayerPrefs.SetInt("gettre1", 1);
+        GMTag.GetComponent<MainBtnEvt>().CheckTre();
     }
 
 }

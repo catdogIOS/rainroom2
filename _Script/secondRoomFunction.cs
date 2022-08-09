@@ -108,6 +108,8 @@ public class secondRoomFunction : CavasData
     public AudioSource m_end;
     public AudioClip sp_end, sp_original;
 
+    public GameObject moveBack_obj, tre2_obj;
+
 
     #region
 
@@ -444,9 +446,24 @@ public class secondRoomFunction : CavasData
             wallImg2_obj.GetComponent<Image>().sprite = reformWall2_spr[PlayerPrefs.GetInt("setwallpalette", 0)];
         }
 
-
+        //보물찾기
+        if (PlayerPrefs.GetInt("gettre2", 0) == 1)
+        {
+            tre2_obj.SetActive(false);
+        }
     }
 
+    //보물찾기
+    public void OpenTra2()
+    {
+        if (GMTag == null)
+        {
+            GMTag = GameObject.FindGameObjectWithTag("GMtag");
+        }
+        tre2_obj.SetActive(false);
+        PlayerPrefs.SetInt("gettre2", 1);
+        GMTag.GetComponent<MainBtnEvt>().CheckTre();
+    }
 
     //공원대화500회 1
     //도시대화500회 2

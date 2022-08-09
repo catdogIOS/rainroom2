@@ -48,6 +48,8 @@ public class Parkfunction : CavasData
     public AudioSource m_end;
     public AudioClip sp_end, sp_original;
 
+    public GameObject tre5_obj;
+
     private void Awake()
     {
         //초기화
@@ -94,6 +96,12 @@ public class Parkfunction : CavasData
         else
         {
             endg();
+        }
+
+        //보물찾기
+        if (PlayerPrefs.GetInt("gettre5", 0) == 1)
+        {
+            tre5_obj.SetActive(false);
         }
     }
 
@@ -645,6 +653,17 @@ public class Parkfunction : CavasData
             yield return null;
         }
         needToast_obj.SetActive(false);
+    }
+
+    public void OpenTra5()
+    {
+        if (GMtag == null)
+        {
+            GMtag = GameObject.FindGameObjectWithTag("GMtag");
+        }
+        tre5_obj.SetActive(false);
+        PlayerPrefs.SetInt("gettre5", 1);
+        GMtag.GetComponent<MainBtnEvt>().CheckTre();
     }
 
 }
