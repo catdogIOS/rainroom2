@@ -834,7 +834,7 @@ public class MainShop : ShopHandler {
             funcBox_obj[7].GetComponent<Image>().sprite = funcBox_spr[15];
         }
 
-        if (PlayerPrefs.GetInt("putrug", 0) >= 1)
+        if (PlayerPrefs.GetInt("putrug", 1) >= 1)
         {
             funcBox_obj[10].GetComponent<Image>().sprite = funcBox_spr[20];
         }
