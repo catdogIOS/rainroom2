@@ -1329,4 +1329,28 @@ public class FirstRoomFunction : CavasData {
         GMTag.GetComponent<MainBtnEvt>().CheckTre();
     }
 
+    /// <summary>
+    /// 업적 팝업 터치 인포 뒷면 보기
+    /// </summary>
+    public void AcBtnShowInfoBack()
+    {
+        if (GMNotdistroy == null)
+        {
+            GMNotdistroy = GameObject.FindGameObjectWithTag("GMtag");
+        }
+        if (GMNotdistroy.GetComponent<MainBtnEvt>().MainWindow_obj[0].activeSelf)
+        {
+            GMNotdistroy.GetComponent<MainInfo>().infoWindowTurn();
+        }
+        else
+        {
+            GMNotdistroy.GetComponent<MainInfo>().infoShow();
+            GMNotdistroy.GetComponent<MainBtnEvt>().openInfoWindow();
+            GMNotdistroy.GetComponent<MainInfo>().infoWindowTurn();
+            firstGM.GetComponent<TalkEvt>().closeTalkBoon();
+            firstGM.GetComponent<EndingBox>().CloseEnding();
+            firstGM.GetComponent<WindowMiniGame>().CloseMiniGame();
+        }
+    }
+
 }

@@ -465,6 +465,31 @@ public class secondRoomFunction : CavasData
         GMTag.GetComponent<MainBtnEvt>().CheckTre();
     }
 
+    /// <summary>
+    /// 업적 팝업 터치 인포 뒷면 보기
+    /// </summary>
+    public void AcBtnShowInfoBack()
+    {
+        if (GMTag == null)
+        {
+            GMTag = GameObject.FindGameObjectWithTag("GMtag");
+        }
+        if (GMTag.GetComponent<MainBtnEvt>().MainWindow_obj[0].activeSelf)
+        {
+            GMTag.GetComponent<MainInfo>().infoWindowTurn();
+        }
+        else
+        {
+            AllClose();
+            GMTag.GetComponent<MainInfo>().infoShow();
+            GMTag.GetComponent<MainBtnEvt>().openInfoWindow();
+            GMTag.GetComponent<MainInfo>().infoWindowTurn();
+            GM2.GetComponent<GasrangeEvt>().CloseIceBox();
+            GM2.GetComponent<TalkEvt>().closeTalkBoon();
+        }
+    }
+
+
     //공원대화500회 1
     //도시대화500회 2
     //전단지100회 3

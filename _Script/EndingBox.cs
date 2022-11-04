@@ -68,6 +68,16 @@ public class EndingBox : MonoBehaviour {
         }
     }
 
+    public void CloseEnding()
+    {
+        playBtn_obj.SetActive(false);
+        if (endWindow_obj.activeSelf == true)
+        {
+            endWindow_obj.SetActive(false);
+            endtxt_obj.SetActive(false);
+        }
+    }
+
     void checkEnd()
     {
         a = 0;
