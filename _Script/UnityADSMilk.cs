@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.Advertisements;
 using UnityEngine.UI;
 
-public class UnityADSMilk : MonoBehaviour {
+public class UnityADSMilk : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowListener, IUnityAdsInitializationListener
+{
 
     private string gameId = "2883787";//★ Window > Services 설정 테스트 바꿀것 (test용 1486550) //2883787
     public int soundck;
@@ -17,6 +18,13 @@ public class UnityADSMilk : MonoBehaviour {
     Color color;
     public GameObject Toast_obj;
 
+    public string _adUnitId = "rewardedVideo";
+
+    private void Awake()
+    {
+        Advertisement.Initialize(gameId, false, this); //테스트모드 true
+    }
+
     //스프라이트 이미지로 변경
     public Sprite radioMove1_spr, radioMove2_spr;
 
@@ -24,27 +32,21 @@ public class UnityADSMilk : MonoBehaviour {
     void Start () {
         color = new Color(1f, 1f, 1f);
         
-        if (Advertisement.isSupported)
-          {
-              Advertisement.Initialize(gameId, false);//꼭 바꿀 것
-        }
       }
       
     // Update is called once per frame
 
+
     public void ShowRewardedAd()
     {
         PlayerPrefs.SetInt("wait", 1);
-        if (Advertisement.IsReady("rewardedVideo"))
-        {
-            ShowOptions options = new ShowOptions { resultCallback = HandleShowResult };
-            Advertisement.Show("rewardedVideo", options);
-        }
-        else
-        {
-            PlayerPrefs.SetInt("wait", 2);
-            //StartCoroutine("ToastImgFadeOut");
-        }
+        Advertisement.Show("rewardedVideo", this);
+    }
+
+    public void OnUnityAdsShowFailure(string placementId, UnityAdsShowError error, string message)
+    {
+        PlayerPrefs.SetInt("wait", 2);
+        StartCoroutine("ToastImgFadeOut");
     }
 
     public void adYN()
@@ -236,5 +238,43 @@ public class UnityADSMilk : MonoBehaviour {
             yield return null;
         }
         Toast_obj.SetActive(false);
+    }
+
+    public void OnUnityAdsAdLoaded(string placementId)
+    {
+    }
+
+    public void OnUnityAdsFailedToLoad(string placementId, UnityAdsLoadError error, string message)
+    {
+    }
+
+    public void OnUnityAdsShowStart(string placementId)
+    {
+    }
+
+    public void OnUnityAdsShowClick(string placementId)
+    {
+    }
+
+
+
+    public void OnUnityAdsShowComplete(string adUnitId, UnityAdsShowCompletionState showCompletionState)
+    {
+        if (adUnitId.Equals(_adUnitId) && showCompletionState.Equals(UnityAdsShowCompletionState.COMPLETED))
+        {
+            PlayerPrefs.SetInt("milkadc", 1);
+            PlayerPrefs.SetInt("setmilkadc", 0);
+            PlayerPrefs.SetInt("adrunout", 0);
+            Advertisement.Load(_adUnitId, this);
+        }
+    }
+
+
+    public void OnInitializationComplete()
+    {
+    }
+
+    public void OnInitializationFailed(UnityAdsInitializationError error, string message)
+    {
     }
 }

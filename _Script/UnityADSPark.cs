@@ -4,15 +4,16 @@ using UnityEngine;
 using UnityEngine.Advertisements;
 using UnityEngine.UI;
 
-public class UnityADSPark : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowListener
+public class UnityADSPark : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowListener, IUnityAdsInitializationListener
 {
 
     //아이폰 테스트용
     private string gameId = "2883787";//★ Window > Services 설정 테스트 바꿀것 (test용 1486550) //2883787
     public int soundck;
     public GameObject ad_obj, radio_ani, adBtn_obj;
+    public string _adUnitId = "rewardedVideo";
 
-	int sG,mG;
+    int sG,mG;
     int sG2, mG2;
    
     Color color;
@@ -46,43 +47,53 @@ public class UnityADSPark : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowL
         }
 
 
-
-
-        if (Advertisement.isSupported)
-          {
-              Advertisement.Initialize(gameId, false);
-          }
-
         LoadAd();
     }
 
 
+    private void Awake()
+    {
+        Advertisement.Initialize(gameId, false, this);//테스트모드 true
+    }
+
     public void LoadAd()
     {
-        Advertisement.Load("rewardedVideo", this);
+        Advertisement.Load(_adUnitId, this);
     }
 
 
     // Update is called once per frame
 
+
+
     public void ShowRewardedAd()
     {
-        PlayerPrefs.SetInt("wait", 1);
-        if (Advertisement.IsReady("rewardedVideo"))
+
+        if (PlayerPrefs.GetInt("talk", 5) >= 5 && PlayerPrefs.GetInt("adrunout", 0) == 0)
         {
-            ShowOptions options = new ShowOptions { resultCallback = HandleShowResult };
-            Advertisement.Show("rewardedVideo", this);
-            //PlayerPrefs.SetInt("secf", 240);
-            //광고 20초 시
-            StartCoroutine("AdTimeCheck");
+
+            if (PlayerPrefs.GetInt("outtrip", 0) == 2)
+            {
+                Toast_obj.SetActive(true);
+                //Toast_txt.text = "대화 횟수가 이미 최대값이라 시청할 수 없다.";
+                StartCoroutine("ToastImgFadeOut");
+            }
+            else
+            {
+                Toast_obj.SetActive(true);
+                //Toast_txt.text = "대화 횟수가 이미 최대값이라 시청할 수 없다.";
+                StartCoroutine("ToastImgFadeOut");
+            }
         }
         else
         {
-            //StartCoroutine("ToastImgFadeOut");
-            Wating();
-            PlayerPrefs.SetInt("wait", 2);
+            PlayerPrefs.SetInt("wait", 1);
+            Advertisement.Show("rewardedVideo", this);
+            StartCoroutine("AdTimeCheck");
         }
     }
+
+
 
     public void Wating()
     {
@@ -309,6 +320,9 @@ public class UnityADSPark : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowL
 
     public void OnUnityAdsShowFailure(string placementId, UnityAdsShowError error, string message)
     {
+        PlayerPrefs.SetInt("wait", 2);
+        ad_obj.SetActive(true);
+        Wating();
     }
 
     public void OnUnityAdsShowStart(string placementId)
@@ -337,7 +351,7 @@ public class UnityADSPark : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowL
             StopCoroutine("AdTimeCheck");
             ad_i = 0;
             adChecker_i = 0;
-            if (showCompletionState.Equals(UnityAdsShowCompletionState.COMPLETED))
+            if (placementId.Equals(_adUnitId) && showCompletionState.Equals(UnityAdsShowCompletionState.COMPLETED))
             {
                 GetRewardCall();
                 LoadAd();
@@ -372,5 +386,13 @@ public class UnityADSPark : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowL
                 PlayerPrefs.SetInt("secf0", 240);
             }
         }
+        Advertisement.Load(_adUnitId, this);
+    }
+    public void OnInitializationComplete()
+    {
+    }
+
+    public void OnInitializationFailed(UnityAdsInitializationError error, string message)
+    {
     }
 }

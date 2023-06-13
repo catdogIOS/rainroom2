@@ -1042,6 +1042,7 @@ public class secondRoomFunction : CavasData
     //외출창띄우기
     public void OpenGoOut()
     {
+
         //나갈장소 어디인지  1공원 2도시
         changeOut_i = 1;
         place_txt.text = "공원";
@@ -1069,7 +1070,15 @@ public class secondRoomFunction : CavasData
             PlayerPrefs.SetInt("showhavec", 1);
         }
 
-
+        //외출 문제해결
+        Invoke("gooutfix",5f);
+    }
+    void gooutfix()
+    {
+        if (outTime_txt.text == "00:00")
+        {
+            outGo_obj.GetComponent<Button>().interactable = true;
+        }
     }
     public void CloseGoOut()
     {
