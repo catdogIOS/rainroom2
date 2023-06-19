@@ -9,14 +9,10 @@ public class AdmobADSMilk : MonoBehaviour {
 
     public GameObject GM;
 
-    //보상형 전면 광고
-    private RewardedInterstitialAd rewardedInterstitialAd;
-
-    AdRequest request;
 
     //영상
-    string adUnitIdvideo;
     private RewardedAd rewardedAd;
+    private string _rewardedAdUnitId;
 
 
     int rewardCoin;
@@ -32,130 +28,114 @@ public class AdmobADSMilk : MonoBehaviour {
     void Start() {
         color = new Color(1f, 1f, 1f);
 
-#if UNITY_ANDROID
-        string appId = "ca-app-pub-3940256099942544~3347511713"; 
-#elif UNITY_IPHONE
-        string appId = "ca-app-pub-9179569099191885~3667358059"; //ㅌㅔ스트용 ca-app-pub-3940256099942544~1458002511
-#else
-        string appId = "unexpected_platform";
-#endif
+
         // Initialize the Google Mobile Ads SDK.
-
-        //RequestRewardedVideo();
-        loadAd();
-
-    }
-
-
-    /*
-    //동영상
-    private void RequestRewardedVideo()
-    {
-
-#if UNITY_ANDROID
-            adUnitIdvideo = "ca-app-pub-3940256099942544/5224354917"; 
-#elif UNITY_IPHONE
-        adUnitIdvideo = "ca-app-pub-9179569099191885/8344969668";//테스트용 ca-app-pub-3940256099942544/1712485313
-#else
-        adUnitIdvideo = "unexpected_platform";
-#endif
-
-
-
-        this.rewardedAd = new RewardedAd(adUnitIdvideo);
-
-
-        // Called when the user should be rewarded for watching a video.
-        this.rewardedAd.OnUserEarnedReward += HandleUserEarnedReward;
-        this.rewardedAd.OnAdClosed += HandleRewardedAdClosed;
-
-        // Create an empty ad request.
-        request = new AdRequest.Builder().Build();
-
-
-        // Load the rewarded video ad with the request.
-        this.rewardedAd.LoadAd(request);
-    }
-
-
-    //시청보상
-    public void HandleUserEarnedReward(object sender, Reward args)
-    {
-            PlayerPrefs.SetInt("milkadc", 1);
-            PlayerPrefs.SetInt("setmilkadc", 0);
-    }
-
-    //동영상닫음
-    private void HandleRewardedAdClosed(object sender, System.EventArgs args)
-    {
-        RequestRewardedVideo();
-        Toast_txt.text = "우유 보상 두배 효과가 적용되었다.";
-        StartCoroutine("ToastImgFadeOut");
-        milkad_btn.interactable = false;
-        PlayerPrefs.SetInt("setmilkadc", 1);
-    }
-
-    public void showAdmobVideo()
-    {
-        PlayerPrefs.SetInt("wait", 1);
-        if (this.rewardedAd.IsLoaded())
+        MobileAds.Initialize((InitializationStatus initStatus) =>
         {
-            this.rewardedAd.Show();
-        }
-        else
-        {
-            //GM.GetComponent<UnityADSMilk>().adYes();
-            Toast_txt.text = "아직 볼 수 없다. 나중에 시도하자.";
-            PlayerPrefs.SetInt("wait", 2);
-        }
+            // This callback is called once the MobileAds SDK is initialized.
+        });
+
+        _rewardedAdUnitId = "ca-app-pub-3940256099942544/1712485313";
+
+
+        StartCoroutine("LoadADSstart");
+
+
     }
 
-
-    public void CallBeforAd()
+    public void LoadRewardedAd()
     {
-        //RequestRewardedVideo();
-    }
-
-
-
-    IEnumerator ToastImgFadeOut()
-    {
-        if (PlayerPrefs.GetInt("setmilkadc", 0) == 1)
+        // Clean up the old ad before loading a new one.
+        if (rewardedAd != null)
         {
-            milkad_btn.interactable = true;
-            PlayerPrefs.SetInt("setmilkadc", 0);
+            rewardedAd.Destroy();
+            rewardedAd = null;
         }
 
-        color.a = Mathf.Lerp(0f, 1f, 1f);
-        Toast_obj.GetComponent<Image>().color = color;
-        Toast_obj.SetActive(true);
-        yield return new WaitForSeconds(2.5f);
-        for (float i = 1f; i > 0f; i -= 0.05f)
-        {
-            color.a = Mathf.Lerp(0f, 1f, i);
-            Toast_obj.GetComponent<Image>().color = color;
-            yield return null;
-        }
-        Toast_obj.SetActive(false);
+        //Debug.Log("상태보기 : " + "Loading the rewarded ad.");
+
+        // create our request used to load the ad.
+        var adRequest = new AdRequest.Builder().Build();
+
+        // send the request to load the ad.
+        RewardedAd.Load(_rewardedAdUnitId, adRequest,
+            (RewardedAd ad, LoadAdError error) =>
+            {
+                // if error is not null, the load request failed.
+                if (error != null || ad == null)
+                {
+                    //Debug.LogError("Rewarded ad failed to load an ad " + "with error : " + error);
+                    return;
+                }
+
+                //Debug.Log("상태보기 : " + "Rewarded ad loaded with response : " + ad.GetResponseInfo());
+
+                rewardedAd = ad;
+            });
+
+        RegisterEventHandlers(rewardedAd); //이벤트 등록
     }
 
-    */
 
-    //보상형 전면 광고
-    private void adLoadCallback(RewardedInterstitialAd ad, AdFailedToLoadEventArgs error)
+    private void RegisterReloadHandler(RewardedAd ad)
     {
-        if (error == null)
+        // Raised when the ad closed full screen content.
+        ad.OnAdFullScreenContentClosed += () =>
         {
-            rewardedInterstitialAd = ad;
+            //Debug.Log("Rewarded Ad full screen content closed.");
 
-        }
+            // Reload the ad so that we can show another as soon as possible.
+            LoadRewardedAd();
+        };
+        // Raised when the ad failed to open full screen content.
+        ad.OnAdFullScreenContentFailed += (AdError error) =>
+        {
+            //Debug.LogError("Rewarded ad failed to open full screen content " + "with error : " + error);
+
+            // Reload the ad so that we can show another as soon as possible.
+            LoadRewardedAd();
+        };
     }
+
+
+    private void RegisterEventHandlers(RewardedAd ad)
+    {
+        // Raised when the ad is estimated to have earned money.
+        ad.OnAdPaid += (AdValue adValue) =>
+        {
+            //Debug.Log("광고");
+        };
+
+        ad.OnAdFullScreenContentClosed += () =>
+        {
+            PlayerPrefs.SetInt("adrunout", 0);
+            LoadRewardedAd();
+            //Debug.Log("광고닫기");
+        };
+    }
+
+
+
+
+
     public void ShowRewardedInterstitialAd()
     {
+        //Debug.Log("상태보기 : " + rewardedAd);
+
         PlayerPrefs.SetInt("wait", 1);
-        if (rewardedInterstitialAd != null)
+        if (rewardedAd != null)
         {
-            rewardedInterstitialAd.Show(userEarnedRewardCallback);
+            rewardedAd.Show((Reward reward) =>
+            {
+                //Toast_contain3.SetActive(true);
+                //Toast_contain2.SetActive(false);
+                PlayerPrefs.SetInt("milkadc", 1);
+                PlayerPrefs.SetInt("setmilkadc", 0);
+                Toast_obj2.SetActive(true);
+                GM.GetComponent<WindowMiniGame>().MilkYes();
+                PlayerPrefs.SetInt("setmilkadc", 1);
+                StartCoroutine("LoadADSmilk");
+            });
         }
         else
         {
@@ -164,19 +144,25 @@ public class AdmobADSMilk : MonoBehaviour {
             Toast_contain.SetActive(true);
             Toast_txt.text = "아직 볼 수 없다. 나중에 시도하자.";
             PlayerPrefs.SetInt("wait", 2);
+            LoadRewardedAd();
         }
+
     }
 
-    private void userEarnedRewardCallback(Reward reward)
+
+    IEnumerator LoadADSstart()
     {
-        PlayerPrefs.SetInt("milkadc", 1);
-        PlayerPrefs.SetInt("setmilkadc", 0);
-        Toast_obj2.SetActive(true);
-
-        GM.GetComponent<WindowMiniGame>().MilkYes();
-        PlayerPrefs.SetInt("setmilkadc", 1);
-        loadAd();
+        yield return new WaitForSeconds(2f);
+        LoadRewardedAd();
     }
+
+
+    IEnumerator LoadADSmilk()
+    {
+        yield return new WaitForSeconds(60f);
+        LoadRewardedAd();
+    }
+
 
     public void touchToastEvt()
     {
@@ -184,15 +170,6 @@ public class AdmobADSMilk : MonoBehaviour {
         Toast_obj2.SetActive(false);
     }
 
-
-    void loadAd()
-    {
-        //보상형 전면 광고
-        // Create an empty ad request.
-        AdRequest request = new AdRequest.Builder().Build();
-        // Load the rewarded ad with the request.
-        RewardedInterstitialAd.LoadAd("ca-app-pub-9179569099191885/1419243518", request, adLoadCallback);
-    }
 
 
     public void falsetoast()
