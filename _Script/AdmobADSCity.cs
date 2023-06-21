@@ -37,15 +37,11 @@ public class AdmobADSCity : MonoBehaviour {
         StartCoroutine("adTimeFlow2");
         StartCoroutine("adAniTime2");
 
-        // Initialize the Google Mobile Ads SDK.
-        MobileAds.Initialize((InitializationStatus initStatus) =>
-        {
-            // This callback is called once the MobileAds SDK is initialized.
-        });
         
-        _rewardedAdUnitId = "ca-app-pub-3940256099942544/1712485313";
-        _GoOutADSid = "ca-app-pub-3940256099942544/6978759866";
+        _rewardedAdUnitId = "ca-app-pub-9179569099191885/8344969668";
+        _GoOutADSid = "ca-app-pub-9179569099191885/5519050563";
 
+        StartCoroutine("LoadADSstart2");
         StartCoroutine("LoadADSstart");
 
     }
@@ -82,46 +78,10 @@ public class AdmobADSCity : MonoBehaviour {
                 rewardedAd = ad;
             });
 
-        RegisterEventHandlers(rewardedAd); //이벤트 등록
+        //RegisterEventHandlers(rewardedAd); //이벤트 등록
     }
 
 
-
-    private void RegisterReloadHandler(RewardedAd ad)
-    {
-        // Raised when the ad closed full screen content.
-        ad.OnAdFullScreenContentClosed += () =>
-        {
-            //Debug.Log("Rewarded Ad full screen content closed.");
-
-            // Reload the ad so that we can show another as soon as possible.
-            LoadRewardedAd();
-        };
-        // Raised when the ad failed to open full screen content.
-        ad.OnAdFullScreenContentFailed += (AdError error) =>
-        {
-            //Debug.LogError("Rewarded ad failed to open full screen content " + "with error : " + error);
-
-            // Reload the ad so that we can show another as soon as possible.
-            LoadRewardedAd();
-        };
-    }
-
-
-
-    private void RegisterEventHandlers(RewardedAd ad)
-    {
-        // Raised when the ad is estimated to have earned money.
-        ad.OnAdPaid += (AdValue adValue) =>
-        {
-            //Debug.Log("광고");
-        };
-
-        ad.OnAdFullScreenContentClosed += () =>
-        {
-            //Debug.Log("광고닫기");
-        };
-    }
 
 
     public void showAdmobVideo()
@@ -175,14 +135,17 @@ public class AdmobADSCity : MonoBehaviour {
     {
         yield return new WaitForSeconds(60f);
         LoadRewardedAd();
-        Debug.Log("상태보기ㅣㅣㅣㅣㅣ");
     }
 
 
     IEnumerator LoadADSstart()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.5f);
         LoadRewardedAd();
+    }
+    IEnumerator LoadADSstart2()
+    {
+        yield return new WaitForSeconds(1f);
         LoadRewardedInterstitialAd();
     }
 
@@ -290,80 +253,7 @@ public class AdmobADSCity : MonoBehaviour {
 
                 rewardedInterstitialAd = ad;
             });
-        RegisterEventHandlers(rewardedInterstitialAd); //이벤트 등록
-    }
-
-
-
-    //보상형 전면 광고 보여주기
-    public void ShowRewardedInterstitialAd()
-    {
-        PlayerPrefs.SetInt("wait", 1);
-
-        //Debug.Log("상태보기 : " + rewardedInterstitialAd);
-        if (rewardedInterstitialAd != null)
-        {
-            rewardedInterstitialAd.Show((Reward reward) =>
-            {
-                // TODO: Reward the user.
-                PlayerPrefs.SetInt("seatime", 4);
-                Toast_obj2.SetActive(true);
-            });
-        }
-        else
-        {
-            GM.GetComponent<UnityADSPark>().Wating();
-            PlayerPrefs.SetInt("wait", 2);
-            LoadRewardedInterstitialAd();
-        }
-
-    }
-
-    private void RegisterEventHandlers(RewardedInterstitialAd ad)
-    {
-        ad.OnAdPaid += (AdValue adValue) =>
-        {
-
-        };
-        ad.OnAdImpressionRecorded += () =>
-        {
-            //Debug.Log("Interstitial ad recorded an impression.");
-        };
-        ad.OnAdClicked += () =>
-        {
-            //Debug.Log("Interstitial ad was clicked.");
-        };
-        ad.OnAdFullScreenContentOpened += () =>
-        {
-            //Debug.Log("Interstitial ad full screen content opened.");
-        };
-        ad.OnAdFullScreenContentClosed += () =>
-        {
-            LoadRewardedInterstitialAd();
-
-            //Debug.Log("Interstitial ad full screen content closed.");
-        };
-        ad.OnAdFullScreenContentFailed += (AdError error) =>
-        {
-            //Debug.LogError("Interstitial ad failed to open full screen content " + "with error : " + error);
-        };
-    }
-
-
-    private void RegisterReloadHandler(RewardedInterstitialAd ad)
-    {
-        ad.OnAdFullScreenContentClosed += (null);
-        {
-            //Debug.Log("Interstitial Ad full screen content closed.");
-
-            LoadRewardedInterstitialAd();
-        };
-        ad.OnAdFullScreenContentFailed += (AdError error) =>
-        {
-            //Debug.LogError("Interstitial ad failed to open full screen content " + "with error : " + error);
-
-            LoadRewardedInterstitialAd();
-        };
+       // RegisterEventHandlers(rewardedInterstitialAd); //이벤트 등록
     }
 
 

@@ -28,14 +28,7 @@ public class AdmobADSMilk : MonoBehaviour {
     void Start() {
         color = new Color(1f, 1f, 1f);
 
-
-        // Initialize the Google Mobile Ads SDK.
-        MobileAds.Initialize((InitializationStatus initStatus) =>
-        {
-            // This callback is called once the MobileAds SDK is initialized.
-        });
-
-        _rewardedAdUnitId = "ca-app-pub-3940256099942544/1712485313";
+        _rewardedAdUnitId = "ca-app-pub-9179569099191885/8344969668";
 
 
         StartCoroutine("LoadADSstart");
@@ -73,50 +66,8 @@ public class AdmobADSMilk : MonoBehaviour {
                 rewardedAd = ad;
             });
 
-        RegisterEventHandlers(rewardedAd); //이벤트 등록
+       // RegisterEventHandlers(rewardedAd); //이벤트 등록
     }
-
-
-    private void RegisterReloadHandler(RewardedAd ad)
-    {
-        // Raised when the ad closed full screen content.
-        ad.OnAdFullScreenContentClosed += () =>
-        {
-            //Debug.Log("Rewarded Ad full screen content closed.");
-
-            // Reload the ad so that we can show another as soon as possible.
-            LoadRewardedAd();
-        };
-        // Raised when the ad failed to open full screen content.
-        ad.OnAdFullScreenContentFailed += (AdError error) =>
-        {
-            //Debug.LogError("Rewarded ad failed to open full screen content " + "with error : " + error);
-
-            // Reload the ad so that we can show another as soon as possible.
-            LoadRewardedAd();
-        };
-    }
-
-
-    private void RegisterEventHandlers(RewardedAd ad)
-    {
-        // Raised when the ad is estimated to have earned money.
-        ad.OnAdPaid += (AdValue adValue) =>
-        {
-            //Debug.Log("광고");
-        };
-
-        ad.OnAdFullScreenContentClosed += () =>
-        {
-            PlayerPrefs.SetInt("adrunout", 0);
-            LoadRewardedAd();
-            //Debug.Log("광고닫기");
-        };
-    }
-
-
-
-
 
     public void ShowRewardedInterstitialAd()
     {

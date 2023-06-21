@@ -26,16 +26,12 @@ public class AdmobADSPark : MonoBehaviour {
         color = new Color(1f, 1f, 1f);
 
 
-        // Initialize the Google Mobile Ads SDK.
-        MobileAds.Initialize((InitializationStatus initStatus) =>
-        {
-            // This callback is called once the MobileAds SDK is initialized.
-        });
         
-        _rewardedAdUnitId = "ca-app-pub-3940256099942544/1712485313";
-        _GoOutADSid = "ca-app-pub-3940256099942544/6978759866";
+        _rewardedAdUnitId = "ca-app-pub-9179569099191885/8344969668";
+        _GoOutADSid = "ca-app-pub-9179569099191885/5519050563";
 
 
+        StartCoroutine("LoadADSstart2");
         StartCoroutine("LoadADSstart");
 
 
@@ -72,45 +68,11 @@ public class AdmobADSPark : MonoBehaviour {
                 rewardedAd = ad;
             });
 
-        RegisterEventHandlers(rewardedAd); //이벤트 등록
+        //RegisterEventHandlers(rewardedAd); //이벤트 등록
     }
 
 
 
-    private void RegisterReloadHandler(RewardedAd ad)
-    {
-        // Raised when the ad closed full screen content.
-        ad.OnAdFullScreenContentClosed += () =>
-        {
-            //Debug.Log("Rewarded Ad full screen content closed.");
-
-            // Reload the ad so that we can show another as soon as possible.
-            LoadRewardedAd();
-        };
-        // Raised when the ad failed to open full screen content.
-        ad.OnAdFullScreenContentFailed += (AdError error) =>
-        {
-            //Debug.LogError("Rewarded ad failed to open full screen content " + "with error : " + error);
-
-            // Reload the ad so that we can show another as soon as possible.
-            LoadRewardedAd();
-        };
-    }
-
-
-    private void RegisterEventHandlers(RewardedAd ad)
-    {
-        // Raised when the ad is estimated to have earned money.
-        ad.OnAdPaid += (AdValue adValue) =>
-        {
-            //Debug.Log("광고");
-        };
-
-        ad.OnAdFullScreenContentClosed += () =>
-        {
-            //Debug.Log("광고닫기");
-        };
-    }
 
 
     void giveMeReward()
@@ -130,8 +92,13 @@ public class AdmobADSPark : MonoBehaviour {
 
     IEnumerator LoadADSstart()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.5f);
         LoadRewardedAd();
+    }
+
+    IEnumerator LoadADSstart2()
+    {
+        yield return new WaitForSeconds(1f);
         LoadRewardedInterstitialAd();
     }
 
@@ -222,7 +189,7 @@ public class AdmobADSPark : MonoBehaviour {
 
                 rewardedInterstitialAd = ad;
             });
-        RegisterEventHandlers(rewardedInterstitialAd); //이벤트 등록
+        //RegisterEventHandlers(rewardedInterstitialAd); //이벤트 등록
     }
 
 
@@ -259,53 +226,5 @@ public class AdmobADSPark : MonoBehaviour {
     }
 
 
-
-    private void RegisterEventHandlers(RewardedInterstitialAd ad)
-    {
-        ad.OnAdPaid += (AdValue adValue) =>
-        {
-
-        };
-        ad.OnAdImpressionRecorded += () =>
-        {
-            //Debug.Log("Interstitial ad recorded an impression.");
-        };
-        ad.OnAdClicked += () =>
-        {
-            //Debug.Log("Interstitial ad was clicked.");
-        };
-        ad.OnAdFullScreenContentOpened += () =>
-        {
-            //Debug.Log("Interstitial ad full screen content opened.");
-        };
-        ad.OnAdFullScreenContentClosed += () =>
-        {
-            LoadRewardedInterstitialAd();
-
-            //Debug.Log("Interstitial ad full screen content closed.");
-        };
-        ad.OnAdFullScreenContentFailed += (AdError error) =>
-        {
-            //Debug.LogError("Interstitial ad failed to open full screen content " + "with error : " + error);
-        };
-    }
-
-
-    private void RegisterReloadHandler(RewardedInterstitialAd ad)
-    {
-        ad.OnAdFullScreenContentClosed += (null);
-        {
-            //Debug.Log("Interstitial Ad full screen content closed.");
-
-            LoadRewardedInterstitialAd();
-        };
-        ad.OnAdFullScreenContentFailed += (AdError error) =>
-        {
-            //Debug.LogError("Interstitial ad failed to open full screen content " + "with error : " + error);
-
-            LoadRewardedInterstitialAd();
-        };
-    }
-
-
+    
 }
