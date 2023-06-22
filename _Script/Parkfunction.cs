@@ -107,6 +107,8 @@ public class Parkfunction : CavasData
 
     // Use this for initialization
     void Start () {
+        outGo_obj.GetComponent<Button>().interactable = true;
+
         //밤낮
         setDay();
         //이밴트 랜덤 

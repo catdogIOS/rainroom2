@@ -160,6 +160,8 @@ public class secondRoomFunction : CavasData
     // Use this for initialization
     void Start()
     {
+        outGo_obj.GetComponent<Button>().interactable = true;
+
         PlayerPrefs.SetInt("adrunout", 0);
         //외출시 스페이드 얻기 초기화
         PlayerPrefs.SetInt("outspade", 2);
