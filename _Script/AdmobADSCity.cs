@@ -257,6 +257,30 @@ public class AdmobADSCity : MonoBehaviour {
     }
 
 
+    //보상형 전면 광고 보여주기
+    public void ShowRewardedInterstitialAd()
+    {
+        PlayerPrefs.SetInt("wait", 1);
+
+        //Debug.Log("상태보기 : " + rewardedInterstitialAd);
+        if (rewardedInterstitialAd != null)
+        {
+            rewardedInterstitialAd.Show((Reward reward) =>
+            {
+                // TODO: Reward the user.
+                PlayerPrefs.SetInt("seatime", 4);
+                Toast_obj2.SetActive(true);
+            });
+        }
+        else
+        {
+            GM.GetComponent<UnityADSPark>().Wating();
+            PlayerPrefs.SetInt("wait", 2);
+            LoadRewardedInterstitialAd();
+        }
+
+    }
+
     public void touchToastEvt()
     {
         Toast_obj2.SetActive(false);
