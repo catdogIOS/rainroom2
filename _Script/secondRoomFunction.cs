@@ -108,7 +108,7 @@ public class secondRoomFunction : CavasData
     public AudioSource m_end;
     public AudioClip sp_end, sp_original;
 
-    public GameObject moveBack_obj, tre2_obj;
+    public GameObject moveBack_obj, tre2_obj, nightchangeWindow, nightchangeWindow2;
 
 
     #region
@@ -1124,12 +1124,16 @@ public class secondRoomFunction : CavasData
             if (k >= 6)
             {
                 dayRoom.SetActive(true);
+                nightchangeWindow.SetActive(true);
+                nightchangeWindow2.SetActive(true);
                 PlayerPrefs.SetInt("dayday", 1);
             }
             else
             {
                 //낮
                 dayRoom.SetActive(false);
+                nightchangeWindow.SetActive(false);
+                nightchangeWindow2.SetActive(false);
                 PlayerPrefs.SetInt("dayday", 0);
             }
         }
@@ -1143,12 +1147,16 @@ public class secondRoomFunction : CavasData
             if (k < 6)
             {
                 dayRoom.SetActive(true);
+                nightchangeWindow.SetActive(true);
+                nightchangeWindow2.SetActive(true);
                 PlayerPrefs.SetInt("dayday", 1);
             }
             else
             {
                 //낮
                 dayRoom.SetActive(false);
+                nightchangeWindow.SetActive(false);
+                nightchangeWindow2.SetActive(false);
                 PlayerPrefs.SetInt("dayday", 0);
             }
         }

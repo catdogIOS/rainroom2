@@ -1265,12 +1265,16 @@ public class FirstRoomFunction : CavasData {
             if (k >= 6)
             {
                 dayRoom.SetActive(true);
+                GM.GetComponent<WindowMiniGame>().nightchangeWindow.SetActive(true);
+                GM.GetComponent<WindowMiniGame>().nightchangeWindow2.SetActive(true);
                 PlayerPrefs.SetInt("dayday", 1);
             }
             else
             {
                 //낮
                 dayRoom.SetActive(false);
+                GM.GetComponent<WindowMiniGame>().nightchangeWindow.SetActive(false);
+                GM.GetComponent<WindowMiniGame>().nightchangeWindow2.SetActive(false);
                 PlayerPrefs.SetInt("dayday", 0);
             }
         }
@@ -1284,12 +1288,16 @@ public class FirstRoomFunction : CavasData {
             if (k < 6)
             {
                 dayRoom.SetActive(true);
+                GM.GetComponent<WindowMiniGame>().nightchangeWindow.SetActive(true);
+                GM.GetComponent<WindowMiniGame>().nightchangeWindow2.SetActive(true);
                 PlayerPrefs.SetInt("dayday", 1);
             }
             else
             {
                 //낮
                 dayRoom.SetActive(false);
+                GM.GetComponent<WindowMiniGame>().nightchangeWindow.SetActive(false);
+                GM.GetComponent<WindowMiniGame>().nightchangeWindow2.SetActive(false);
                 PlayerPrefs.SetInt("dayday", 0);
             }
         }
