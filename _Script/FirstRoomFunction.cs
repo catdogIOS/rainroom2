@@ -1255,14 +1255,10 @@ public class FirstRoomFunction : CavasData {
     public void setDay()
     {
         System.DateTime time = System.DateTime.Now;
-        if (time.ToString("tt") == "PM")
+        if (int.Parse(time.ToString("HH")) >= 12)
         {
-            int k = int.Parse(time.ToString("hh"));
-            if (k == 12)
-            {
-                k = 0;
-            }
-            if (k >= 6)
+            int Hourcheck = int.Parse(time.ToString("HH"));
+            if (Hourcheck >= 18 || Hourcheck < 6)
             {
                 dayRoom.SetActive(true);
                 GM.GetComponent<WindowMiniGame>().nightchangeWindow.SetActive(true);
@@ -1280,12 +1276,8 @@ public class FirstRoomFunction : CavasData {
         }
         else
         {
-            int k = int.Parse(time.ToString("hh"));
-            if (k == 12)
-            {
-                k = 0;
-            }
-            if (k < 6)
+            int Hourcheck = int.Parse(time.ToString("HH"));
+            if (Hourcheck >= 18 || Hourcheck < 6)
             {
                 dayRoom.SetActive(true);
                 GM.GetComponent<WindowMiniGame>().nightchangeWindow.SetActive(true);

@@ -464,20 +464,15 @@ public class CityFunction : CavasData
     //밤낮
     public void setDay()
     {
+
         System.DateTime time = System.DateTime.Now;
-        if (time.ToString("tt") == "PM")
+        if (int.Parse(time.ToString("HH")) >= 12)
         {
-            int k = int.Parse(time.ToString("hh"));
-            if (k == 12)
-            {
-                k = 0;
-            }
-            if (k >= 6)
+            int Hourcheck = int.Parse(time.ToString("HH"));
+            if (Hourcheck >= 18 || Hourcheck < 6)
             {
                 dayRoom.SetActive(true);
                 dayRoom2.SetActive(true);
-                //nightShop_obj.SetActive(true);
-                //dayShop_obj.SetActive(false);
                 PlayerPrefs.SetInt("dayday", 1);
                 noteSign_obj.GetComponent<Image>().sprite = noteSignNight_spr;
             }
@@ -486,24 +481,16 @@ public class CityFunction : CavasData
                 //낮
                 dayRoom.SetActive(false);
                 dayRoom2.SetActive(false);
-                //nightShop_obj.SetActive(false);
-                //dayShop_obj.SetActive(true);
                 PlayerPrefs.SetInt("dayday", 0);
             }
         }
         else
         {
-            int k = int.Parse(time.ToString("hh"));
-            if (k == 12)
-            {
-                k = 0;
-            }
-            if (k < 6)
+            int Hourcheck = int.Parse(time.ToString("HH"));
+            if (Hourcheck >= 18 || Hourcheck < 6)
             {
                 dayRoom.SetActive(true);
                 dayRoom2.SetActive(true);
-                //nightShop_obj.SetActive(true);
-                //dayShop_obj.SetActive(false);
                 PlayerPrefs.SetInt("dayday", 1);
                 noteSign_obj.GetComponent<Image>().sprite = noteSignNight_spr;
             }
@@ -512,12 +499,12 @@ public class CityFunction : CavasData
                 //낮
                 dayRoom.SetActive(false);
                 dayRoom2.SetActive(false);
-                //nightShop_obj.SetActive(false);
-                //dayShop_obj.SetActive(true);
                 PlayerPrefs.SetInt("dayday", 0);
             }
         }
     }
+
+
 
     public void OpenTr3()
     {

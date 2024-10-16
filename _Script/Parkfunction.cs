@@ -283,19 +283,15 @@ public class Parkfunction : CavasData
     public void setDay()
     {
 
-        //이밴트 랜덤 
+        //이밴트 랜덤
         eventRand_i = Random.Range(0, 3);
         System.DateTime time = System.DateTime.Now;
-        if (time.ToString("tt") == "PM")
+        if (int.Parse(time.ToString("HH")) >= 12)
         {
-            int k = int.Parse(time.ToString("hh"));
-            if (k == 12)
+            int Hourcheck = int.Parse(time.ToString("HH"));
+            if (Hourcheck >= 18 || Hourcheck < 6)
             {
-                k = 0;
-            }
-            if (k >= 6)
-            {
-                    dayRoom.SetActive(true);
+                dayRoom.SetActive(true);
                 dayRoom2.SetActive(true);
                 nightShop_obj.SetActive(true);
                 dayShop_obj.SetActive(false);
@@ -313,12 +309,8 @@ public class Parkfunction : CavasData
         }
         else
         {
-            int k = int.Parse(time.ToString("hh"));
-            if (k == 12)
-            {
-                k = 0;
-            }
-            if (k < 6)
+            int Hourcheck = int.Parse(time.ToString("HH"));
+            if (Hourcheck >= 18 || Hourcheck < 6)
             {
                 dayRoom.SetActive(true);
                 dayRoom2.SetActive(true);
@@ -337,6 +329,8 @@ public class Parkfunction : CavasData
             }
         }
     }
+
+
 
 
     /// <summary>
