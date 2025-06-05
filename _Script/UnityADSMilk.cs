@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Advertisements;
 using UnityEngine.UI;
 
-public class UnityADSMilk : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowListener, IUnityAdsInitializationListener
+public class UnityADSMilk : MonoBehaviour
 {
 
     private string gameId = "2883787";//★ Window > Services 설정 테스트 바꿀것 (test용 1486550) //2883787
@@ -19,11 +19,6 @@ public class UnityADSMilk : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowL
     public GameObject Toast_obj;
 
     public string _adUnitId = "rewardedVideo";
-
-    private void Awake()
-    {
-        Advertisement.Initialize(gameId, false, this); //테스트모드 true
-    }
 
     //스프라이트 이미지로 변경
     public Sprite radioMove1_spr, radioMove2_spr;
@@ -40,13 +35,6 @@ public class UnityADSMilk : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowL
     public void ShowRewardedAd()
     {
         PlayerPrefs.SetInt("wait", 1);
-        Advertisement.Show("rewardedVideo", this);
-    }
-
-    public void OnUnityAdsShowFailure(string placementId, UnityAdsShowError error, string message)
-    {
-        PlayerPrefs.SetInt("wait", 2);
-        StartCoroutine("ToastImgFadeOut");
     }
 
     public void adYN()
@@ -64,14 +52,6 @@ public class UnityADSMilk : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowL
     }
 
 
-    private void HandleShowResult(ShowResult result)
-    {
-        if (result == ShowResult.Finished)
-        {
-            PlayerPrefs.SetInt("milkadc", 1);
-            PlayerPrefs.SetInt("setmilkadc", 0);
-        }
-    }
 
     public void Admob()
     {
@@ -240,41 +220,5 @@ public class UnityADSMilk : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowL
         Toast_obj.SetActive(false);
     }
 
-    public void OnUnityAdsAdLoaded(string placementId)
-    {
-    }
 
-    public void OnUnityAdsFailedToLoad(string placementId, UnityAdsLoadError error, string message)
-    {
-    }
-
-    public void OnUnityAdsShowStart(string placementId)
-    {
-    }
-
-    public void OnUnityAdsShowClick(string placementId)
-    {
-    }
-
-
-
-    public void OnUnityAdsShowComplete(string adUnitId, UnityAdsShowCompletionState showCompletionState)
-    {
-        if (adUnitId.Equals(_adUnitId) && showCompletionState.Equals(UnityAdsShowCompletionState.COMPLETED))
-        {
-            PlayerPrefs.SetInt("milkadc", 1);
-            PlayerPrefs.SetInt("setmilkadc", 0);
-            PlayerPrefs.SetInt("adrunout", 0);
-            Advertisement.Load(_adUnitId, this);
-        }
-    }
-
-
-    public void OnInitializationComplete()
-    {
-    }
-
-    public void OnInitializationFailed(UnityAdsInitializationError error, string message)
-    {
-    }
 }

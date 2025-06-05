@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Advertisements;
 using UnityEngine.UI;
 
-public class UnityADS : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowListener, IUnityAdsInitializationListener
+public class UnityADS : MonoBehaviour
 {
 
     private string gameId = "2883787";//★ Window > Services 설정 테스트 바꿀것 (test용 1486550) //2883787
@@ -66,16 +66,11 @@ public class UnityADS : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowListe
       }
 
 
-    private void Awake()
-    {
-        Advertisement.Initialize(gameId, false, this);//테스트모드 true
-    }
 
     // Update is called once per frame
 
     public void LoadAd()
     {
-        Advertisement.Load(_adUnitId, this);
     }
 
 
@@ -90,7 +85,7 @@ public class UnityADS : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowListe
         else
         {
             PlayerPrefs.SetInt("wait", 1);
-            Advertisement.Show("rewardedVideo", this);
+           // Advertisement.Show("rewardedVideo", this);
             StartCoroutine("AdTimeCheck");
         }
 
@@ -166,17 +161,6 @@ public class UnityADS : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowListe
         ad_obj.SetActive(false);
     }
 
-
-    private void HandleShowResult(ShowResult result)
-    {
-        ad_i = 0;
-        adChecker_i = 0;
-        StopCoroutine("AdTimeCheck");
-        if (result == ShowResult.Finished)
-        {
-            GetRewardCall();
-        }
-    }
 
     public void Admob()
     {
@@ -366,60 +350,6 @@ public class UnityADS : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowListe
     }
     
 
-    public void OnUnityAdsAdLoaded(string placementId)
-    {
-        //Debug.Log("테스트트1");
-    }
-
-    public void OnUnityAdsFailedToLoad(string placementId, UnityAdsLoadError error, string message)
-    {
-       // Debug.Log("테스트2");
-    }
-
-    public void OnUnityAdsShowFailure(string placementId, UnityAdsShowError error, string message)
-    {
-        PlayerPrefs.SetInt("wait", 2);
-        ad_obj.SetActive(true);
-        Wating();
-        LoadAd();
-    }
-
-    public void OnUnityAdsShowStart(string placementId)
-    {
-        //Debug.Log("테스트4");
-    }
-
-    public void OnUnityAdsShowClick(string placementId)
-    {
-       // Debug.Log("테스트5");
-    }
-
-    public void OnUnityAdsShowComplete(string placementId, UnityAdsShowCompletionState showCompletionState)
-    {
-        //닫기가 실행될때 체크
-        if (adChecker_i == 1)
-        {
-            StopCoroutine("AdTimeCheck");
-            ad_i = 0;
-            adChecker_i = 0;
-            GetRewardCall();
-            LoadAd();
-        }
-        else
-        {
-            StopCoroutine("AdTimeCheck");
-            ad_i = 0;
-            adChecker_i = 0;
-
-            if (placementId.Equals(_adUnitId) && showCompletionState.Equals(UnityAdsShowCompletionState.COMPLETED))
-            {
-                    GetRewardCall();
-                    LoadAd();
-                }
-            
-        }
-    }
-
     void GetRewardCall()
     {
         if (PlayerPrefs.GetInt("place", 0) == 0)
@@ -446,14 +376,6 @@ public class UnityADS : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowListe
                 PlayerPrefs.SetInt("secf2", 240);
             }
         }
-        Advertisement.Load(_adUnitId, this);
-    }
-    public void OnInitializationComplete()
-    {
-    }
-
-    public void OnInitializationFailed(UnityAdsInitializationError error, string message)
-    {
     }
 
 }

@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using GoogleMobileAds;
 using GoogleMobileAds.Api;
+
 using UnityEngine.UI;
 using System;
 
@@ -9,6 +11,7 @@ public class AdmobADSMilk : MonoBehaviour {
 
     public GameObject GM;
 
+    public AudioSource se_back, se_back2;
 
     //영상
     private RewardedAd rewardedAd;
@@ -31,7 +34,7 @@ public class AdmobADSMilk : MonoBehaviour {
         _rewardedAdUnitId = "ca-app-pub-9179569099191885/8344969668";
 
 
-        StartCoroutine("LoadADSstart");
+        LoadRewardedAd();
 
 
     }
@@ -48,12 +51,14 @@ public class AdmobADSMilk : MonoBehaviour {
         //Debug.Log("상태보기 : " + "Loading the rewarded ad.");
 
         // create our request used to load the ad.
-        var adRequest = new AdRequest.Builder().Build();
+        var adRequest = new AdRequest();
 
         // send the request to load the ad.
         RewardedAd.Load(_rewardedAdUnitId, adRequest,
             (RewardedAd ad, LoadAdError error) =>
             {
+                
+                RegisterEventHandlers(ad); //이벤트 등록
                 // if error is not null, the load request failed.
                 if (error != null || ad == null)
                 {
@@ -68,14 +73,33 @@ public class AdmobADSMilk : MonoBehaviour {
 
        // RegisterEventHandlers(rewardedAd); //이벤트 등록
     }
+    
+    
+    private void RegisterEventHandlers(RewardedAd ad)
+    {
+        // Raised when the ad is estimated to have earned money.
+        ad.OnAdPaid += (AdValue adValue) =>
+        {
+            //Debug.Log("광고");
+        };
+
+        ad.OnAdFullScreenContentClosed += () =>
+        {
+            //Debug.Log("광고닫기");
+
+        };
+    }
+
 
     public void ShowRewardedInterstitialAd()
     {
         //Debug.Log("상태보기 : " + rewardedAd);
 
         PlayerPrefs.SetInt("wait", 1);
-        if (rewardedAd != null)
+        if (rewardedAd != null && rewardedAd.CanShowAd())
         {
+                se_back.mute = true;
+                se_back2.mute = true;
             rewardedAd.Show((Reward reward) =>
             {
                 //Toast_contain3.SetActive(true);
@@ -85,7 +109,8 @@ public class AdmobADSMilk : MonoBehaviour {
                 Toast_obj2.SetActive(true);
                 GM.GetComponent<WindowMiniGame>().MilkYes();
                 PlayerPrefs.SetInt("setmilkadc", 1);
-                StartCoroutine("LoadADSmilk");
+            se_back.mute = false;
+            se_back2.mute = false;
             });
         }
         else

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Advertisements;
 using UnityEngine.UI;
 
-public class UnityADSPark : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowListener, IUnityAdsInitializationListener
+public class UnityADSPark : MonoBehaviour
 {
 
     //아이폰 테스트용
@@ -51,21 +51,15 @@ public class UnityADSPark : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowL
     }
 
 
-    private void Awake()
-    {
-        Advertisement.Initialize(gameId, false, this);//테스트모드 true
-    }
-
     public void LoadAd()
     {
-        Advertisement.Load(_adUnitId, this);
     }
 
 
     // Update is called once per frame
 
 
-
+/*
     public void ShowRewardedAd()
     {
 
@@ -92,7 +86,7 @@ public class UnityADSPark : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowL
             StartCoroutine("AdTimeCheck");
         }
     }
-
+*/
 
 
     public void Wating()
@@ -160,23 +154,11 @@ public class UnityADSPark : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowL
         ad_i = 0;
         adChecker_i = 0;
         StopCoroutine("AdTimeCheck");
-        ShowRewardedAd();
+        //ShowRewardedAd();
         ad_obj.SetActive(false);
     }
     
 
-    private void HandleShowResult(ShowResult result)
-    {
-        ad_i = 0;
-        adChecker_i = 0;
-        StopCoroutine("AdTimeCheck");
-        if (result == ShowResult.Finished)
-        {
-            GetRewardCall();
-        }
-    }
-
-    
 
 	IEnumerator adTimeFlow(){
 		while (mG>-1) {
@@ -310,56 +292,7 @@ public class UnityADSPark : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowL
         StopCoroutine("AdTimeCheck");
     }
 
-    public void OnUnityAdsAdLoaded(string placementId)
-    {
-    }
-
-    public void OnUnityAdsFailedToLoad(string placementId, UnityAdsLoadError error, string message)
-    {
-    }
-
-    public void OnUnityAdsShowFailure(string placementId, UnityAdsShowError error, string message)
-    {
-        PlayerPrefs.SetInt("wait", 2);
-        ad_obj.SetActive(true);
-        Wating();
-    }
-
-    public void OnUnityAdsShowStart(string placementId)
-    {
-    }
-
-    public void OnUnityAdsShowClick(string placementId)
-    {
-    }
-
-    public void OnUnityAdsShowComplete(string placementId, UnityAdsShowCompletionState showCompletionState)
-    {
-
-
-        //닫기가 실행될때 체크
-        if (adChecker_i == 1)
-        {
-            StopCoroutine("AdTimeCheck");
-            ad_i = 0;
-            adChecker_i = 0;
-            GetRewardCall();
-            LoadAd();
-        }
-        else
-        {
-            StopCoroutine("AdTimeCheck");
-            ad_i = 0;
-            adChecker_i = 0;
-            if (placementId.Equals(_adUnitId) && showCompletionState.Equals(UnityAdsShowCompletionState.COMPLETED))
-            {
-                GetRewardCall();
-                LoadAd();
-            }
-        }
-    }
-
-
+/*
     void GetRewardCall()
     {
         if (PlayerPrefs.GetInt("outtrip", 0) == 2)
@@ -386,13 +319,6 @@ public class UnityADSPark : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowL
                 PlayerPrefs.SetInt("secf0", 240);
             }
         }
-        Advertisement.Load(_adUnitId, this);
     }
-    public void OnInitializationComplete()
-    {
-    }
-
-    public void OnInitializationFailed(UnityAdsInitializationError error, string message)
-    {
-    }
+    */
 }
