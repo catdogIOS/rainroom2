@@ -21,8 +21,7 @@ public class MainTimeHandler : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-
-        if (PlayerPrefs.GetInt("emergencyCODE", 0) == 0)
+        if (PlayerPrefs.GetInt("emergencyCODE", 0) == 99)
         {
             System.DateTime turnBackTime = System.DateTime.Now.AddHours(-10);
             PlayerPrefs.SetString("milktime", turnBackTime.ToString());
@@ -33,7 +32,7 @@ public class MainTimeHandler : MonoBehaviour {
             turnBackTime = System.DateTime.Now.AddHours(-1);
             PlayerPrefs.SetString("outLastTime", turnBackTime.ToString());
 
-            turnBackTime = System.DateTime.Now.AddHours(-10);
+            turnBackTime = System.DateTime.Now.AddHours(-12);
             PlayerPrefs.SetString("seedLastTime", turnBackTime.ToString());
 
             turnBackTime = System.DateTime.Now.AddHours(-10);
@@ -63,7 +62,7 @@ public class MainTimeHandler : MonoBehaviour {
             PlayerPrefs.SetInt("secf2", 0);
             PlayerPrefs.SetInt("secf3", 0);
 
-            PlayerPrefs.SetInt("emergencyCODE", 99);
+            PlayerPrefs.SetInt("emergencyCODE", 77);
         }
 
         //빗물
