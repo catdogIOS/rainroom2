@@ -468,7 +468,7 @@ public class Parkfunction : CavasData
         }
         if (hotR_i >= hp_i)//240온수가 있는가?
         {
-            PlayerPrefs.SetString("outlasttimepark", System.DateTime.Now.ToString());
+            PlayerPrefs.SetString("outlasttimepark", System.DateTime.UtcNow.ToString());
             PlayerPrefs.SetInt("outtrip", 3);
             
             hotR_i = hotR_i - hp_i;
@@ -521,9 +521,20 @@ public class Parkfunction : CavasData
             }
             else
             {
-                System.DateTime dateTime = new System.DateTime(1970, 1, 1, 0, 0, 0, 0);
-                System.DateTime lastDateTime = System.DateTime.Parse(PlayerPrefs.GetString("outlasttimepark", dateTime.ToString()));
-                System.TimeSpan compareTime = System.DateTime.Now - lastDateTime;
+                System.DateTime dateTime = System.DateTime.UtcNow.AddHours(-1);
+                string lastTime = PlayerPrefs.GetString("outlasttimepark", dateTime.ToString());
+                System.DateTime lastDateTime;
+                try
+                {
+                    lastDateTime = System.DateTime.Parse(lastTime);
+                }
+                catch (System.Exception)
+                {
+                    lastTime = System.DateTime.UtcNow.AddHours(-1).ToString();
+                }
+                lastDateTime = System.DateTime.Parse(lastTime);
+
+                System.TimeSpan compareTime = System.DateTime.UtcNow - lastDateTime;
                 int m = (int)compareTime.TotalMinutes;
                 int sec = (int)compareTime.TotalSeconds;
                 sec = sec - (sec / 60) * 60;

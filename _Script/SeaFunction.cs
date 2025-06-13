@@ -158,7 +158,7 @@ public class SeaFunction : MonoBehaviour {
         StopCoroutine("MoveImageChange");
         StartCoroutine("MoveImageChange");
 
-        PlayerPrefs.SetString("outlasttimecity", System.DateTime.Now.ToString());
+        PlayerPrefs.SetString("outlasttimecity", System.DateTime.UtcNow.ToString());
         PlayerPrefs.SetInt("seatime", 9);
         PlayerPrefs.Save();
         data_sign = CSVReader.Read("Talk/bottle_sea");

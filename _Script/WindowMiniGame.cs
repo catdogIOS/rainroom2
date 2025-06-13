@@ -340,14 +340,21 @@ public void OpenMiniGame()
 
     void milk()
     {
-        //초기값을가져옵니다
-        System.DateTime dateTimenow = new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc);
-        //str로장되어있는과거접속시간을가져옵니다
+        System.DateTime dateTimenow = System.DateTime.UtcNow.AddHours(-12);
         string lastTimem = PlayerPrefs.GetString("milktime", dateTimenow.ToString());
+        System.DateTime lastDateTimem;
+        try
+        {
+            lastDateTimem = System.DateTime.Parse(lastTimem);
+        }
+        catch (System.Exception)
+        {
+            lastTimem = System.DateTime.UtcNow.AddHours(-12).ToString();
+        }
         //형변환을해줍니다
-        System.DateTime lastDateTimem = System.DateTime.Parse(lastTimem);
+        lastDateTimem = System.DateTime.Parse(lastTimem);
         //계산
-        System.TimeSpan compareTimem = System.DateTime.Now - lastDateTimem;
+        System.TimeSpan compareTimem = System.DateTime.UtcNow - lastDateTimem;
         int hour;
         int minute;
         hour = (int)compareTimem.TotalHours;
@@ -402,7 +409,7 @@ public void OpenMiniGame()
         PlayerPrefs.SetInt(str + "ht", htm);
 
         //시간초기화
-        PlayerPrefs.SetString("milktime", System.DateTime.Now.ToString());
+        PlayerPrefs.SetString("milktime", System.DateTime.UtcNow.ToString());
         milk_obj.GetComponent<Image>().sprite = milk_spr[0];
         milkBtn_obj.SetActive(false);
 
@@ -601,14 +608,20 @@ public void OpenMiniGame()
 
     IEnumerator toastMilkTime()
     {
-        //초기값을가져옵니다
-        System.DateTime dateTimenow = new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc);
-        //str로장되어있는과거접속시간을가져옵니다
+        System.DateTime dateTimenow = System.DateTime.UtcNow.AddHours(-12);
         string lastTimem = PlayerPrefs.GetString("milktime", dateTimenow.ToString());
-        //형변환을해줍니다
-        System.DateTime lastDateTimem = System.DateTime.Parse(lastTimem);
+        System.DateTime lastDateTimem;
+        try
+        {
+            lastDateTimem = System.DateTime.Parse(lastTimem);
+        }
+        catch (System.Exception)
+        {
+            lastTimem = System.DateTime.UtcNow.AddHours(-12).ToString();
+        }
+        lastDateTimem = System.DateTime.Parse(lastTimem);    
         //계산
-        System.TimeSpan compareTimem = System.DateTime.Now - lastDateTimem;
+        System.TimeSpan compareTimem = System.DateTime.UtcNow - lastDateTimem;
         int hour;
         int minute;
         hour = (int)compareTimem.TotalHours;

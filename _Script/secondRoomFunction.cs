@@ -1179,7 +1179,7 @@ public class secondRoomFunction : CavasData
         }
         if (heart_i >= hp_i)//30테스트
         {
-            PlayerPrefs.SetString("outLastTime", System.DateTime.Now.ToString());
+            PlayerPrefs.SetString("outLastTime", System.DateTime.UtcNow.ToString());
             PlayerPrefs.SetInt("outtrip", 1);
             PlayerPrefs.SetInt("outorhome", 1);
 
@@ -1253,9 +1253,21 @@ public class secondRoomFunction : CavasData
             }
             else
             {
-                System.DateTime dateTime = new System.DateTime(1970, 1, 1, 0, 0, 0, 0);
-                System.DateTime lastDateTime = System.DateTime.Parse(PlayerPrefs.GetString("outLastTime", dateTime.ToString()));
-                System.TimeSpan compareTime = System.DateTime.Now - lastDateTime;
+                
+                System.DateTime dateTime = System.DateTime.UtcNow.AddHours(-1);
+                string lastTime = PlayerPrefs.GetString("outLastTime", dateTime.ToString());
+                System.DateTime lastDateTime;
+                try
+                {
+                    lastDateTime = System.DateTime.Parse(lastTime);
+                }
+                catch (System.Exception)
+                {
+                    lastTime = System.DateTime.UtcNow.AddHours(-1).ToString();
+                }
+                lastDateTime = System.DateTime.Parse(lastTime);
+
+                System.TimeSpan compareTime = System.DateTime.UtcNow - lastDateTime;
                 int m = (int)compareTime.TotalMinutes;
                 int sec = (int)compareTime.TotalSeconds;
                 sec = sec - (sec / 60) * 60;
@@ -1319,7 +1331,7 @@ public class secondRoomFunction : CavasData
 
     public void GoCity()
     {
-        PlayerPrefs.SetString("outLastTime", System.DateTime.Now.ToString());
+        PlayerPrefs.SetString("outLastTime", System.DateTime.UtcNow.ToString());
         PlayerPrefs.SetInt("outtrip", 2);
         PlayerPrefs.SetInt("bouttime", 14);
         //외출업적

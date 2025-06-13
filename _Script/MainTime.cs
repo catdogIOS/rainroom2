@@ -350,8 +350,21 @@ public class MainTime : MonoBehaviour {
 
     //배달시간
     void beadal(){
-		System.DateTime lastDateTime = System.DateTime.Parse (PlayerPrefs.GetString ("foodLastTime", System.DateTime.Now.ToString ()));
-		System.TimeSpan compareTime = System.DateTime.Now - lastDateTime;
+
+        System.DateTime dateTime = System.DateTime.UtcNow.AddHours(-1);
+        string lastTime = PlayerPrefs.GetString("foodLastTime", dateTime.ToString());
+        System.DateTime lastDateTime;
+        try
+        {
+            lastDateTime = System.DateTime.Parse(lastTime);
+        }
+        catch (System.Exception)
+        {
+            lastTime = System.DateTime.UtcNow.AddHours(-1).ToString();
+        }
+        lastDateTime = System.DateTime.Parse(lastTime);
+
+		System.TimeSpan compareTime = System.DateTime.UtcNow - lastDateTime;
 		int m = (int)compareTime.TotalMinutes;
 		int sec = (int)compareTime.TotalSeconds;
 		sec = sec - (sec / 60) * 60;

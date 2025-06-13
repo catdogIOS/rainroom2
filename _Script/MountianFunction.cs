@@ -137,7 +137,7 @@ public class MountianFunction : MonoBehaviour {
         StopCoroutine("MoveImageChange");
         StartCoroutine("MoveImageChange");
 
-        PlayerPrefs.SetString("outlasttimepark", System.DateTime.Now.ToString());
+        PlayerPrefs.SetString("outlasttimepark", System.DateTime.UtcNow.ToString());
         PlayerPrefs.SetInt("foresttime", 9);
         PlayerPrefs.Save();
         data_sign = CSVReader.Read("Talk/sign_park");

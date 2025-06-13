@@ -128,16 +128,23 @@ public class MainBtnEvt : CavasData
         string str = PlayerPrefs.GetString("code", "");
         coldRain_i = PlayerPrefs.GetInt(str + "c", 0);
         hotRain_i = PlayerPrefs.GetInt(str + "h", 0);
-        
+
         //모인 빗물
-        //현재시간을가져옵니다
-        System.DateTime dateTimenow = System.DateTime.Now;
-        //str로장되어있는과거접속시간을가져옵니다
+        System.DateTime dateTimenow = System.DateTime.UtcNow;
         string lastTimem = PlayerPrefs.GetString("lastTime", dateTimenow.ToString());
-        //형변환을해줍니다
-        System.DateTime lastDateTimem = System.DateTime.Parse(lastTimem);
+        System.DateTime lastDateTimem;
+        try
+        {
+            lastDateTimem = System.DateTime.Parse(lastTimem);
+        }
+        catch (System.Exception)
+        {
+            lastTimem = System.DateTime.UtcNow.AddHours(-1).ToString();
+        }
+        lastDateTimem = System.DateTime.Parse(lastTimem);
+
         //계산
-        System.TimeSpan compareTimem = System.DateTime.Now - lastDateTimem;
+        System.TimeSpan compareTimem = System.DateTime.UtcNow - lastDateTimem;
         //1분당1씩줍니다
         getRain = (int)compareTimem.TotalMinutes;
         //최초실행
