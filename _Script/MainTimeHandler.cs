@@ -21,7 +21,7 @@ public class MainTimeHandler : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        if (PlayerPrefs.GetInt("emergencyCODE", 0) == 99)
+        if (PlayerPrefs.GetInt("emergencyCODE5", 0) == 0)
         {
             System.DateTime turnBackTime = System.DateTime.UtcNow.AddHours(-10);
             PlayerPrefs.SetString("milktime", turnBackTime.ToString());
@@ -62,7 +62,7 @@ public class MainTimeHandler : MonoBehaviour {
             PlayerPrefs.SetInt("secf2", 0);
             PlayerPrefs.SetInt("secf3", 0);
 
-            PlayerPrefs.SetInt("emergencyCODE", 77);
+            PlayerPrefs.SetInt("emergencyCODE5", 11);
         }
 
         //빗물
