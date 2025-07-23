@@ -237,7 +237,7 @@ public void OpenMiniGame()
             minicat_obj.SetActive(true);
         }
         PlayerPrefs.SetInt("windowairplane", 999);
-        PlayerPrefs.Save();
+        //PlayerPrefs.Save();
     }
 
     public void CloseMiniGame()

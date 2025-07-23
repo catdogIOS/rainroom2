@@ -323,7 +323,7 @@ public class SleepTime : MonoBehaviour
                 }
                 PlayerPrefs.SetInt("nowsleep", 0);
                 PlayerPrefs.SetInt("sleepTxt", 0);
-                PlayerPrefs.Save();
+               // PlayerPrefs.Save();
 
             }
             else
@@ -400,9 +400,9 @@ public class SleepTime : MonoBehaviour
         PlayerPrefs.SetInt("lovepoint", loveExp);
         PlayerPrefs.SetInt(str + "c", c);
         PlayerPrefs.SetInt(str + "h", h);
-        PlayerPrefs.Save();
         PlayerPrefs.SetInt("showdir", 0);
         PlayerPrefs.SetInt("randdiary", -99);
+        PlayerPrefs.Save();
     }
 
     //매초시간흐르게

@@ -139,7 +139,6 @@ public class MountianFunction : MonoBehaviour {
 
         PlayerPrefs.SetString("outlasttimepark", System.DateTime.UtcNow.ToString());
         PlayerPrefs.SetInt("foresttime", 9);
-        PlayerPrefs.Save();
         data_sign = CSVReader.Read("Talk/sign_park");
         signText();
 
@@ -223,6 +222,7 @@ public class MountianFunction : MonoBehaviour {
                 }
             }
         }
+        PlayerPrefs.Save();
     }//End OF Start
     
     public void GoLeft()
@@ -321,7 +321,6 @@ public class MountianFunction : MonoBehaviour {
             squralWindow_obj.SetActive(false);
             v = v - 200;
             PlayerPrefs.SetInt(str + "c", v);
-            PlayerPrefs.Save();
             sqH_obj.SetActive(true);
             audio_obj.GetComponent<SoundEvt>().foodSound();
             int e;
@@ -329,6 +328,7 @@ public class MountianFunction : MonoBehaviour {
             e = e + 1;
             PlayerPrefs.SetInt("lovepoint", e);
             feed();
+            PlayerPrefs.Save();
         }
         else
         {

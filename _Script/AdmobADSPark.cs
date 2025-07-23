@@ -143,12 +143,12 @@ public class AdmobADSPark : MonoBehaviour {
                 rewardedAd.Show((Reward reward) =>
                 {
                     PlayerPrefs.SetInt("talk", 5);
-                    PlayerPrefs.Save();
                     if (PlayerPrefs.GetInt("talk", 5) >= 5)
                     {
                         PlayerPrefs.SetInt("secf0", 240);
                     }
                     giveMeReward();
+                    PlayerPrefs.Save();
                 });
             }
             else

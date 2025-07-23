@@ -1279,7 +1279,10 @@ public class secondRoomFunction : CavasData
                 {
                     outTime_txt.text = "00:00";
                     PlayerPrefs.SetInt("outtimeon", 0);
-                    PlayerPrefs.Save();
+                    if (outGo_obj.GetComponent<Button>().interactable == false)
+                    {
+                        PlayerPrefs.Save();
+                    }
                     outGo_obj.GetComponent<Button>().interactable = true;
                 }
                 else

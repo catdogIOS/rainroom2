@@ -132,7 +132,7 @@ public class SecondRoomTime : MonoBehaviour {
             beadalTime_txt.text = "00:00";
             //배달이 온
             PlayerPrefs.SetInt("cooked", 0);
-            PlayerPrefs.Save();
+            //PlayerPrefs.Save();
         }
     }
     IEnumerator goDust1()

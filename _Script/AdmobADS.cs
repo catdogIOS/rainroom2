@@ -156,20 +156,20 @@ public class AdmobADS : MonoBehaviour {
                     if (PlayerPrefs.GetInt("place", 0) == 0)
                     {
                         PlayerPrefs.SetInt("talk", 5);
-                        PlayerPrefs.Save();
                         if (PlayerPrefs.GetInt("talk", 5) >= 5)
                         {
                             PlayerPrefs.SetInt("secf", 240);
                         }
+                        PlayerPrefs.Save();
                     }
                     else
                     {
                         PlayerPrefs.SetInt("talk", 5);
-                        PlayerPrefs.Save();
                         if (PlayerPrefs.GetInt("talk", 5) >= 5)
                         {
                             PlayerPrefs.SetInt("secf2", 240);
                         }
+                        PlayerPrefs.Save();
                     }
                     giveMeReward();
                 });
