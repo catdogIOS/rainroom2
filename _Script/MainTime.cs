@@ -192,7 +192,7 @@ public class MainTime : MonoBehaviour {
                 }
             }
             
-            PlayerPrefs.Save();
+            //PlayerPrefs.Save();
             yield return new WaitForSeconds(1f);
 		}
 	}
