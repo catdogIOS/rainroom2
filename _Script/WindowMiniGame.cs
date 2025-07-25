@@ -340,19 +340,21 @@ public void OpenMiniGame()
 
     void milk()
     {
-        System.DateTime dateTimenow = System.DateTime.UtcNow.AddHours(-12);
-        string lastTimem = PlayerPrefs.GetString("milktime", dateTimenow.ToString());
+        System.DateTime dateTimenow = System.DateTime.UtcNow.AddHours(-19);
+        string lastTimem = PlayerPrefs.GetString("milktime", dateTimenow.ToString("o"));
         System.DateTime lastDateTimem;
         try
         {
-            lastDateTimem = System.DateTime.Parse(lastTimem);
+            lastDateTimem = System.DateTime.ParseExact(lastTimem, "o", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
         }
         catch (System.Exception)
         {
-            lastTimem = System.DateTime.UtcNow.AddHours(-12).ToString();
+            lastTimem = System.DateTime.UtcNow.AddHours(-19).ToString("o");
         }
         //형변환을해줍니다
-        lastDateTimem = System.DateTime.Parse(lastTimem);
+        lastDateTimem = System.DateTime.ParseExact(lastTimem, "o", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
+
+
         //계산
         System.TimeSpan compareTimem = System.DateTime.UtcNow - lastDateTimem;
         int hour;
@@ -409,7 +411,7 @@ public void OpenMiniGame()
         PlayerPrefs.SetInt(str + "ht", htm);
 
         //시간초기화
-        PlayerPrefs.SetString("milktime", System.DateTime.UtcNow.ToString());
+        PlayerPrefs.SetString("milktime", System.DateTime.UtcNow.ToString("o"));
         milk_obj.GetComponent<Image>().sprite = milk_spr[0];
         milkBtn_obj.SetActive(false);
 
@@ -608,18 +610,19 @@ public void OpenMiniGame()
 
     IEnumerator toastMilkTime()
     {
-        System.DateTime dateTimenow = System.DateTime.UtcNow.AddHours(-12);
-        string lastTimem = PlayerPrefs.GetString("milktime", dateTimenow.ToString());
+        System.DateTime dateTimenow = System.DateTime.UtcNow.AddHours(-19);
+        string lastTimem = PlayerPrefs.GetString("milktime", dateTimenow.ToString("o"));
         System.DateTime lastDateTimem;
         try
         {
-            lastDateTimem = System.DateTime.Parse(lastTimem);
+            lastDateTimem = System.DateTime.ParseExact(lastTimem, "o", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
         }
         catch (System.Exception)
         {
-            lastTimem = System.DateTime.UtcNow.AddHours(-12).ToString();
+            lastTimem = System.DateTime.UtcNow.AddHours(-19).ToString("o");
         }
-        lastDateTimem = System.DateTime.Parse(lastTimem);    
+        lastDateTimem = System.DateTime.ParseExact(lastTimem, "o", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
+
         //계산
         System.TimeSpan compareTimem = System.DateTime.UtcNow - lastDateTimem;
         int hour;

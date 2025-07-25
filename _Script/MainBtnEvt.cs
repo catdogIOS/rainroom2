@@ -131,17 +131,18 @@ public class MainBtnEvt : CavasData
 
         //모인 빗물
         System.DateTime dateTimenow = System.DateTime.UtcNow;
-        string lastTimem = PlayerPrefs.GetString("lastTime", dateTimenow.ToString());
+        string lastTimem = PlayerPrefs.GetString("lastTime", dateTimenow.ToString("o"));
         System.DateTime lastDateTimem;
         try
         {
-            lastDateTimem = System.DateTime.Parse(lastTimem);
+            lastDateTimem = System.DateTime.ParseExact(lastTimem, "o", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
         }
         catch (System.Exception)
         {
-            lastTimem = System.DateTime.UtcNow.AddHours(-1).ToString();
+            lastTimem = System.DateTime.UtcNow.AddHours(-10).ToString("o");
         }
-        lastDateTimem = System.DateTime.Parse(lastTimem);
+        lastDateTimem = System.DateTime.ParseExact(lastTimem, "o", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
+        
 
         //계산
         System.TimeSpan compareTimem = System.DateTime.UtcNow - lastDateTimem;
@@ -160,7 +161,7 @@ public class MainBtnEvt : CavasData
         coldRain_i = coldRain_i + getRain;
         PlayerPrefs.SetInt(str + "c", coldRain_i);
         //rainNum.text = coldRain_i.ToString();
-        PlayerPrefs.SetString("lastTime", dateTimenow.ToString());
+        PlayerPrefs.SetString("lastTime", dateTimenow.ToString("o"));
         PlayerPrefs.Save();
 
         //빗물이 마이너스일때
@@ -396,7 +397,6 @@ public class MainBtnEvt : CavasData
 
     // Use this for initialization
     void Start () {
-
         color = new Color(1f, 1f, 1f);
         menuBack_vet = menuBack_obj.transform.position; ;
         PlayerPrefs.SetFloat("mbx", menuBack_vet.x);

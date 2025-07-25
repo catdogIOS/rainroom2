@@ -20,11 +20,11 @@ public class MainTimeHandler : MonoBehaviour {
     public GameObject warring_obj;
 
     // Use this for initialization
-    void Start () {
-        if (PlayerPrefs.GetInt("emergencyCODE5", 0) == 0)
+    void Start () { // ToString "o" 붙인 애들만 UTC로 인해 AddHours에 -9를 추가로 해줘야한다.
+        if (PlayerPrefs.GetInt("emergencyCODE14", 0) == 0)
         {
-            System.DateTime turnBackTime = System.DateTime.UtcNow.AddHours(-10);
-            PlayerPrefs.SetString("milktime", turnBackTime.ToString());
+            System.DateTime turnBackTime = System.DateTime.UtcNow.AddHours(-19);
+            PlayerPrefs.SetString("milktime", turnBackTime.ToString("o"));
 
             turnBackTime = System.DateTime.UtcNow.AddHours(-6);
             PlayerPrefs.SetString("sleepLastTime", turnBackTime.ToString());
@@ -50,11 +50,11 @@ public class MainTimeHandler : MonoBehaviour {
             turnBackTime = System.DateTime.UtcNow.AddHours(-1);
             PlayerPrefs.SetString("foodLastTime", turnBackTime.ToString());
 
-            turnBackTime = System.DateTime.UtcNow.AddHours(-1);
-            PlayerPrefs.SetString("TalkLastTime", turnBackTime.ToString());
+            turnBackTime = System.DateTime.UtcNow.AddHours(-10);
+            PlayerPrefs.SetString("TalkLastTime", turnBackTime.ToString("o"));
 
             turnBackTime = System.DateTime.UtcNow.AddHours(-10);
-            PlayerPrefs.SetString("lastTime", turnBackTime.ToString());
+            PlayerPrefs.SetString("lastTime", turnBackTime.ToString("o"));
 
             PlayerPrefs.SetInt("secf", 0);
             PlayerPrefs.SetInt("secf0", 0);
@@ -62,7 +62,7 @@ public class MainTimeHandler : MonoBehaviour {
             PlayerPrefs.SetInt("secf2", 0);
             PlayerPrefs.SetInt("secf3", 0);
 
-            PlayerPrefs.SetInt("emergencyCODE5", 11);
+            PlayerPrefs.SetInt("emergencyCODE14", 11);
         }
 
         //빗물
@@ -73,7 +73,7 @@ public class MainTimeHandler : MonoBehaviour {
         //돈디스트로이로 씬을 넘어가도 다시 실행되지 않는다
         if (talk >= 5)
         {
-            PlayerPrefs.SetString("TalkLastTime", System.DateTime.UtcNow.ToString());
+            PlayerPrefs.SetString("TalkLastTime", System.DateTime.UtcNow.ToString("o"));
         }
     }
 
@@ -91,18 +91,17 @@ public class MainTimeHandler : MonoBehaviour {
 		//현재시간을가져옵니다
 
         System.DateTime dateTimenow = System.DateTime.UtcNow;
-        string lastTimem = PlayerPrefs.GetString("lastTime", dateTimenow.ToString());
+        string lastTimem = PlayerPrefs.GetString("lastTime", dateTimenow.ToString("o"));
         System.DateTime lastDateTimem;
         try
         {
-            lastDateTimem = System.DateTime.Parse(lastTimem);
+            lastDateTimem = System.DateTime.ParseExact(lastTimem, "o", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
         }
         catch (System.Exception)
         {
-            lastTimem = System.DateTime.UtcNow.AddHours(-1).ToString();
+            lastTimem = System.DateTime.UtcNow.AddHours(-10).ToString("o");
         }
-        lastDateTimem = System.DateTime.Parse(lastTimem);
-        
+        lastDateTimem = System.DateTime.ParseExact(lastTimem, "o", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
 
 		//계산
         System.TimeSpan compareTimem =  System.DateTime.UtcNow - lastDateTimem;
@@ -121,7 +120,7 @@ public class MainTimeHandler : MonoBehaviour {
         coldRain_i = coldRain_i + getRain;
 		PlayerPrefs.SetInt (str + "c", coldRain_i);
 		//rainNum.text = coldRain_i.ToString();
-		PlayerPrefs.SetString("lastTime",dateTimenow.ToString());
+		PlayerPrefs.SetString("lastTime",dateTimenow.ToString("o"));
 		PlayerPrefs.Save ();
 
         //빗물이 마이너스일때
@@ -143,60 +142,67 @@ public class MainTimeHandler : MonoBehaviour {
 		int minute;
 		int sec;
 		int a = 0;
-		while (a == 0) {
-			talk = PlayerPrefs.GetInt ("talk", 5);
-           System.DateTime dateTimenow = System.DateTime.UtcNow.AddHours(-1);
-            lastTime = PlayerPrefs.GetString("TalkLastTime", dateTimenow.ToString());
+		while (a == 0)
+        {
+            talk = PlayerPrefs.GetInt("talk", 5);
+            System.DateTime dateTimenow = System.DateTime.UtcNow.AddHours(-10);
+            lastTime = PlayerPrefs.GetString("TalkLastTime", dateTimenow.ToString("o"));
             System.DateTime lastDateTime;
             try
             {
-                lastDateTime = System.DateTime.Parse(lastTime);
+                lastDateTime = System.DateTime.ParseExact(lastTime, "o", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);                
             }
             catch (System.Exception)
             {
-                lastTime = System.DateTime.UtcNow.AddHours(-10).ToString();
+                lastTime = System.DateTime.UtcNow.AddHours(-10).ToString("o");
             }
-            lastDateTime = System.DateTime.Parse(lastTime);
-			System.TimeSpan compareTime = System.DateTime.UtcNow - lastDateTime;
+            lastDateTime = System.DateTime.ParseExact(lastTime, "o", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
+
+            System.TimeSpan compareTime = System.DateTime.UtcNow - lastDateTime;
             if ((int)compareTime.TotalSeconds < 0)
             {
                 compareTime = System.DateTime.UtcNow - System.DateTime.UtcNow;
             }
             minute = (int)compareTime.TotalMinutes;
-			sec = (int)compareTime.TotalSeconds;
+            sec = (int)compareTime.TotalSeconds;
             sec = sec - (sec / 60) * 60;
             sec = 59 - sec;
-			minute = 4 - minute;
-            
-            if (minute < 0) {
-				while (minute < 0) {
-					minute = minute + 5;
-					//sec = sec + 59;
-					talk++;
-				}
+            minute = 4 - minute;
+
+            if (minute < 0)
+            {
+                while (minute < 0)
+                {
+                    minute = minute + 5;
+                    //sec = sec + 59;
+                    talk++;
+                }
                 //시간을 중간부터 하기위해
                 //PlayerPrefs.SetInt("timeminhelp", 4-minute);
                 //PlayerPrefs.SetInt("timesechelp", 59-sec);
                 //Debug.Log("minute" + minute+ "sec" + sec);
                 //Debug.Log(""+System.DateTime.Now.ToString());
-                PlayerPrefs.SetString ("TalkLastTime", System.DateTime.UtcNow.ToString ());
-				//talkTime_txt.text = "04:59";
-			} else {
-				string str = string.Format (@"{0:00}" + ":", minute) + string.Format (@"{0:00}", sec);
-				talkTime_txt.text = "" + str;
-			}
-
-			talkNum.text = talk.ToString ();
-			if (talk >= 5) {
-				talkTime_txt.text = "00:00";
-				talk = 5;
-				talkNum.text = talk.ToString ();
+                PlayerPrefs.SetString("TalkLastTime", System.DateTime.UtcNow.ToString("o"));
+                //talkTime_txt.text = "04:59";
             }
-			PlayerPrefs.SetInt ("talk", talk);
-			PlayerPrefs.Save ();
-		
-			yield return new WaitForSeconds(0.1f);
-		}
+            else
+            {
+                string str = string.Format(@"{0:00}" + ":", minute) + string.Format(@"{0:00}", sec);
+                talkTime_txt.text = "" + str;
+            }
+
+            talkNum.text = talk.ToString();
+            if (talk >= 5)
+            {
+                talkTime_txt.text = "00:00";
+                talk = 5;
+                talkNum.text = talk.ToString();
+            }
+            PlayerPrefs.SetInt("talk", talk);
+            PlayerPrefs.Save();
+
+            yield return new WaitForSeconds(0.1f);
+        }
 	}
 
 
