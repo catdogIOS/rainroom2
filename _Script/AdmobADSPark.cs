@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using GoogleMobileAds.Api;
 using UnityEngine.UI;
+using GoogleMobileAds.Api.Mediation.IronSource;
 
 
 public class AdmobADSPark : MonoBehaviour {
@@ -22,6 +23,10 @@ public class AdmobADSPark : MonoBehaviour {
     public Text Toast_txt;
     public GameObject GM;
 
+    void Awake()
+    {       
+        GoogleMobileAds.Mediation.IronSource.Api.IronSource.SetConsent(true);
+    }
     // Use this for initialization 앱 ID
     void Start () {
         color = new Color(1f, 1f, 1f);
@@ -84,7 +89,8 @@ public class AdmobADSPark : MonoBehaviour {
 
         ad.OnAdFullScreenContentClosed += () =>
         {
-
+            //Debug.Log("광고닫기");
+            giveMeReward();
         };
     }
 
@@ -92,10 +98,11 @@ public class AdmobADSPark : MonoBehaviour {
 
     void giveMeReward()
     {
-            se_back.mute = false;
-            se_back2.mute = false;
+        se_back.mute = false;
+        se_back2.mute = false;
         Toast_obj.SetActive(true);
         Toast_txt.text = "대화 횟수가 5로 다시 복구되었다.";
+        StopCoroutine("ToastImgFadeOut");
         StartCoroutine("ToastImgFadeOut");
         LoadRewardedAd();
     }
@@ -147,8 +154,6 @@ public class AdmobADSPark : MonoBehaviour {
                     {
                         PlayerPrefs.SetInt("secf0", 240);
                     }
-                    giveMeReward();
-                    PlayerPrefs.Save();
                 });
             }
             else
