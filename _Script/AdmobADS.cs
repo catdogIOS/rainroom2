@@ -39,18 +39,26 @@ public class AdmobADS : MonoBehaviour {
         
         color = new Color(1f, 1f, 1f);
 
+        _rewardedAdUnitId = "ca-app-pub-9179569099191885/8344969668";
+        _GoOutADSid = "ca-app-pub-9179569099191885/2021864778";
         // Initialize the Google Mobile Ads SDK.
         MobileAds.Initialize((InitializationStatus initStatus) =>
         {
-            // This callback is called once the MobileAds SDK is initialized.
+            LoadRewardedInterstitialAd();
         });
-        _rewardedAdUnitId = "ca-app-pub-9179569099191885/8344969668";
-        _GoOutADSid = "ca-app-pub-9179569099191885/2021864778";
 
-        LoadRewardedAd();
-        LoadRewardedInterstitialAd();
+        if (PlayerPrefs.GetInt("lraset", 0) == 0)
+        {
+            PlayerPrefs.SetInt("lraset", 1);
+            Invoke("rewardInvoke", 1f);
+        }
     }
 
+    public void rewardInvoke()
+    {
+        PlayerPrefs.SetInt("lraset", 0);
+        LoadRewardedAd();
+    }
 
 
     public void LoadRewardedAd()
@@ -71,7 +79,6 @@ public class AdmobADS : MonoBehaviour {
         RewardedAd.Load(_rewardedAdUnitId, adRequest2,
             (RewardedAd ad, LoadAdError error) =>
             {
-                RegisterEventHandlers(ad); //이벤트 등록
                 // if error is not null, the load request failed.
                 if (error != null || ad == null)
                 {
@@ -82,9 +89,8 @@ public class AdmobADS : MonoBehaviour {
                 //Debug.Log("상태로드: " + "Rewarded ad loaded with response : " + ad.GetResponseInfo());
 
                 rewardedAd = ad;
+                RegisterEventHandlers(ad); //이벤트 등록
             });
-
-        //RegisterEventHandlers(rewardedAd); //이벤트 등록
     }
 
 

@@ -33,10 +33,16 @@ public class AdmobADSMilk : MonoBehaviour {
 
         _rewardedAdUnitId = "ca-app-pub-9179569099191885/8344969668";
 
-
+        if (PlayerPrefs.GetInt("reward_Invoke", 0) == 0)
+        {
+            PlayerPrefs.SetInt("reward_Invoke", 1);
+            Invoke("rewardInvoke", 1.5f);
+        }
+    }
+    public void rewardInvoke()
+    {
+        PlayerPrefs.SetInt("reward_Invoke", 0);
         LoadRewardedAd();
-
-
     }
 
     public void LoadRewardedAd()
@@ -57,8 +63,7 @@ public class AdmobADSMilk : MonoBehaviour {
         RewardedAd.Load(_rewardedAdUnitId, adRequest,
             (RewardedAd ad, LoadAdError error) =>
             {
-                
-                RegisterEventHandlers(ad); //이벤트 등록
+
                 // if error is not null, the load request failed.
                 if (error != null || ad == null)
                 {
@@ -69,9 +74,10 @@ public class AdmobADSMilk : MonoBehaviour {
                 //Debug.Log("상태보기 : " + "Rewarded ad loaded with response : " + ad.GetResponseInfo());
 
                 rewardedAd = ad;
+                RegisterEventHandlers(ad); //이벤트 등록
             });
 
-       // RegisterEventHandlers(rewardedAd); //이벤트 등록
+        // RegisterEventHandlers(rewardedAd); //이벤트 등록
     }
     
     

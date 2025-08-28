@@ -43,7 +43,8 @@ public class MainTime : MonoBehaviour {
 
     public GameObject r_obj, l_obj, f_obj;
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         PlayerPrefs.SetFloat("iosapidery", spider_obj.transform.position.y);
         PlayerPrefs.SetFloat("ioswindowly", l_obj.transform.position.y);
         PlayerPrefs.SetFloat("ioswindowlx", l_obj.transform.position.x);
@@ -54,9 +55,16 @@ public class MainTime : MonoBehaviour {
         moveY2 = l_obj.transform.position.y;
         //업데이트대신쓴다
         str = PlayerPrefs.GetString("code", "");
-        StartCoroutine ("updateSec");
+        StartCoroutine("updateSec");
         StartCoroutine("rainani");
+        
+        Invoke("seasoncheckInvoke", 1f);
 
+    }
+
+
+    public void seasoncheckInvoke()
+    {
         seasoncheck();
     }
 
