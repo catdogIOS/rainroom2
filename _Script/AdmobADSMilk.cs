@@ -33,16 +33,25 @@ public class AdmobADSMilk : MonoBehaviour {
 
         _rewardedAdUnitId = "ca-app-pub-9179569099191885/8344969668";
 
-        if (PlayerPrefs.GetInt("reward_Invoke", 0) == 0)
+       if (Application.internetReachability != NetworkReachability.NotReachable)
         {
-            PlayerPrefs.SetInt("reward_Invoke", 1);
-            Invoke("rewardInvoke", 1.5f);
+            if (PlayerPrefs.GetInt("rewardInvoke_milk", 0) == 0)
+            {
+                PlayerPrefs.SetInt("rewardInvoke_milk", 1);
+                Invoke("rewardInvoke", 1.5f);
+            }
+        }
+        else
+        {
+            //Debug.Log("No Internet, skip init for now 인터넷 연결 X");
         }
     }
-    public void rewardInvoke()
+
+    public void rewardInvoke_milk()
     {
-        PlayerPrefs.SetInt("reward_Invoke", 0);
+        PlayerPrefs.SetInt("rewardInvoke_milk", 0);
         LoadRewardedAd();
+
     }
 
     public void LoadRewardedAd()
@@ -74,26 +83,8 @@ public class AdmobADSMilk : MonoBehaviour {
                 //Debug.Log("상태보기 : " + "Rewarded ad loaded with response : " + ad.GetResponseInfo());
 
                 rewardedAd = ad;
-                RegisterEventHandlers(ad); //이벤트 등록
             });
 
-        // RegisterEventHandlers(rewardedAd); //이벤트 등록
-    }
-    
-    
-    private void RegisterEventHandlers(RewardedAd ad)
-    {
-        // Raised when the ad is estimated to have earned money.
-        ad.OnAdPaid += (AdValue adValue) =>
-        {
-            //Debug.Log("광고");
-        };
-
-        ad.OnAdFullScreenContentClosed += () =>
-        {
-            //Debug.Log("광고닫기");
-
-        };
     }
 
 

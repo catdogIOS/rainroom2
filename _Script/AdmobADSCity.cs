@@ -29,10 +29,6 @@ public class AdmobADSCity : MonoBehaviour {
 
     public GameObject GM;
 
-    void Awake()
-    {       
-        GoogleMobileAds.Mediation.IronSource.Api.IronSource.SetConsent(true);
-    }
 
     // Use this for initialization 앱 ID
     void Start () {
@@ -47,12 +43,28 @@ public class AdmobADSCity : MonoBehaviour {
         _rewardedAdUnitId = "ca-app-pub-9179569099191885/8344969668";
         _GoOutADSid = "ca-app-pub-9179569099191885/5519050563";
 
-        LoadRewardedAd();
-        LoadRewardedInterstitialAd();
+        if (Application.internetReachability != NetworkReachability.NotReachable)
+        {
+            LoadRewardedInterstitialAd();
+            if (PlayerPrefs.GetInt("rewardInvoke_city", 0) == 0)
+            {
+                PlayerPrefs.SetInt("rewardInvoke_city", 1);
+                Invoke("rewardInvoke_city", 1f);
+            }
+        }
+        else
+        {
+            //인터넷연결안됨
+        }
 
     }
 
 
+    public void rewardInvoke_city()
+    {
+        PlayerPrefs.SetInt("rewardInvoke_city", 0);
+        LoadRewardedAd();
+    }
 
     public void LoadRewardedAd()
     {
@@ -72,7 +84,6 @@ public class AdmobADSCity : MonoBehaviour {
         RewardedAd.Load(_rewardedAdUnitId, adRequest,
             (RewardedAd ad, LoadAdError error) =>
             {
-                RegisterEventHandlers(ad); //이벤트 등록
                 // if error is not null, the load request failed.
                 if (error != null || ad == null)
                 {
@@ -83,9 +94,8 @@ public class AdmobADSCity : MonoBehaviour {
                 //Debug.Log("Rewarded ad loaded with response : " + ad.GetResponseInfo());
 
                 rewardedAd = ad;
+                RegisterEventHandlers(ad); //이벤트 등록
             });
-
-        //RegisterEventHandlers(rewardedAd); //이벤트 등록
     }
 
     private void RegisterEventHandlers(RewardedAd ad)
@@ -266,7 +276,6 @@ public class AdmobADSCity : MonoBehaviour {
         RewardedInterstitialAd.Load(_GoOutADSid, adRequest,
             (RewardedInterstitialAd ad, LoadAdError error) =>
             {
-                RegisterEventHandlers(ad); //이벤트 등록
                 // if error is not null, the load request failed.
                 if (error != null || ad == null)
                 {
@@ -318,32 +327,6 @@ public class AdmobADSCity : MonoBehaviour {
     }
 
 
-    private void RegisterEventHandlers(RewardedInterstitialAd ad)
-    {
-        ad.OnAdPaid += (AdValue adValue) =>
-        {
-
-        };
-        ad.OnAdImpressionRecorded += () =>
-        {
-            //Debug.Log("Interstitial ad recorded an impression.");
-        };
-        ad.OnAdClicked += () =>
-        {
-            //Debug.Log("Interstitial ad was clicked.");
-        };
-        ad.OnAdFullScreenContentOpened += () =>
-        {
-            //Debug.Log("Interstitial ad full screen content opened.");
-        };
-        ad.OnAdFullScreenContentClosed += () =>
-        {
-        };
-        ad.OnAdFullScreenContentFailed += (AdError error) =>
-        {
-            //Debug.LogError("Interstitial ad failed to open full screen content " + "with error : " + error);
-        };
-    }
 
 
 }

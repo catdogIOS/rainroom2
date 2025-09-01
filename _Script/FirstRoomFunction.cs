@@ -121,6 +121,10 @@ public class FirstRoomFunction : CavasData {
     // Use this for initialization
     void Start () {
         PlayerPrefs.SetInt("parkgock",0);
+        PlayerPrefs.SetInt("rewardInvoke_room", 0);
+        PlayerPrefs.SetInt("rewardInvoke_city", 0);
+        PlayerPrefs.SetInt("rewardInvoke_park", 0);
+        PlayerPrefs.SetInt("rewardInvoke_milk", 0);
 
         //다시 나가시겠습니까?
         if (PlayerPrefs.GetInt("outorhome", 0) >= 1)
