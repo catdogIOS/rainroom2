@@ -31,7 +31,8 @@ public class AdmobADSCity : MonoBehaviour {
 
 
     // Use this for initialization 앱 ID
-    void Start () {
+    void Start()
+    {
         color = new Color(1f, 1f, 1f);
 
         StopCoroutine("adTimeFlow2");
@@ -39,7 +40,7 @@ public class AdmobADSCity : MonoBehaviour {
         StartCoroutine("adTimeFlow2");
         StartCoroutine("adAniTime2");
 
-        
+
         _rewardedAdUnitId = "ca-app-pub-9179569099191885/8344969668";
         _GoOutADSid = "ca-app-pub-9179569099191885/5519050563";
 

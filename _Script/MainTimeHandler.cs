@@ -21,7 +21,7 @@ public class MainTimeHandler : MonoBehaviour {
 
     // Use this for initialization
     void Start () { // ToString "o" 붙인 애들만 UTC로 인해 AddHours에 -9를 추가로 해줘야한다.
-        if (PlayerPrefs.GetInt("emergencyCODE15", 0) == 0)
+        if (PlayerPrefs.GetInt("emergencyCODE16", 0) == 0)
         {
             System.DateTime turnBackTime = System.DateTime.UtcNow.AddHours(-19);
             PlayerPrefs.SetString("milktime", turnBackTime.ToString("o"));
@@ -62,7 +62,7 @@ public class MainTimeHandler : MonoBehaviour {
             PlayerPrefs.SetInt("secf2", 0);
             PlayerPrefs.SetInt("secf3", 0);
 
-            PlayerPrefs.SetInt("emergencyCODE15", 11);
+            PlayerPrefs.SetInt("emergencyCODE16", 11);
         }
 
         //빗물

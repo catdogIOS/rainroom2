@@ -22,15 +22,22 @@ public class SceneMove : MonoBehaviour {
 
     void Start()
     {
-        if(PlayerPrefs.GetInt("achievemove", 0) == 1)
+        PlayerPrefs.SetInt("godownLadder", 1);
+        Invoke("godownLadder",1f);
+        if (PlayerPrefs.GetInt("achievemove", 0) == 1)
         {
             achievementfunc();
             PlayerPrefs.SetInt("achievemove", 0);
-            if(PlayerPrefs.GetInt("place", 0) == 0)
+            if (PlayerPrefs.GetInt("place", 0) == 0)
             {
                 title_obj.SetActive(false);
             }
         }
+    }
+
+    void godownLadder()
+    {
+        PlayerPrefs.SetInt("godownLadder", 0);
     }
 
 	IEnumerator Load()
@@ -56,24 +63,27 @@ public class SceneMove : MonoBehaviour {
 
     public void moveDown()
     {
-
-        PlayerPrefs.SetInt("storg", 1);
-        PlayerPrefs.SetInt("unlockshop", 10);
-        if (PlayerPrefs.GetInt("waterpurifiershop", 0) == 0)
+        if(PlayerPrefs.GetInt("godownLadder", 0)==0){
+            PlayerPrefs.SetInt("storg", 1);
+            PlayerPrefs.SetInt("unlockshop", 10);
+            if (PlayerPrefs.GetInt("waterpurifiershop", 0) == 0)
+            {
+                PlayerPrefs.SetInt("waterpurifiershop", 1);
+            }
+            if (GMN == null)
+            {
+                GMN = GameObject.FindGameObjectWithTag("GMtag");
+            }
+            GMN.GetComponent<MainBtnEvt>().allClose();
+            PlayerPrefs.SetInt("achievemove", 1);
+            PlayerPrefs.SetInt("place", 1);
+            StartCoroutine(Load());
+            PlayerPrefs.Save();
+            //아래층으로
+        }else
         {
-            PlayerPrefs.SetInt("waterpurifiershop", 1);
-        }
-        if (GMN == null)
-        {
-            GMN = GameObject.FindGameObjectWithTag("GMtag");
-        }
-        GMN.GetComponent<MainBtnEvt>().allClose();
-        PlayerPrefs.SetInt("achievemove", 1);
-        PlayerPrefs.SetInt("place", 1);
-        StartCoroutine(Load());
-        PlayerPrefs.Save();
-        //아래층으로
 
+        }
     }
 
 	public void moveUp(){

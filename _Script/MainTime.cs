@@ -66,6 +66,7 @@ public class MainTime : MonoBehaviour {
     public void seasoncheckInvoke()
     {
         seasoncheck();
+        PlayerPrefs.SetInt("godownLadder", 0);
     }
 
     void rainmove()
