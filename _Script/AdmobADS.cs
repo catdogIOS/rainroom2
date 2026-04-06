@@ -5,11 +5,13 @@ using GoogleMobileAds.Api;
 using UnityEngine.UI;
 using System;
 using GoogleMobileAds.Api.Mediation.IronSource;
+using GoogleMobileAds.Api.Mediation.UnityAds;
+using Unity.Advertisement.IosSupport;
 
 public class AdmobADS : MonoBehaviour {
     public AudioSource se_back, se_back2;
     //보상형 전면 광고
-    private RewardedInterstitialAd rewardedInterstitialAd;
+    private RewardedAd rewardedInterstitialAd;
     private string _GoOutADSid;
 
     //영상
@@ -33,8 +35,9 @@ public class AdmobADS : MonoBehaviour {
     {
         if (Application.internetReachability != NetworkReachability.NotReachable)
         {
-
-            GoogleMobileAds.Mediation.IronSource.Api.IronSource.SetConsent(true);
+        GoogleMobileAds.Mediation.IronSource.Api.IronSource.SetMetaData("do_not_sell", "true");
+        GoogleMobileAds.Mediation.UnityAds.Api.UnityAds.SetConsentMetaData("gdpr.consent", true);
+        GoogleMobileAds.Mediation.UnityAds.Api.UnityAds.SetConsentMetaData("privacy.consent", true);
         }
         else
         {
@@ -45,10 +48,14 @@ public class AdmobADS : MonoBehaviour {
     // Use this for initialization 앱 ID
     void Start () {
         
+    var reqConfig = new RequestConfiguration
+    {
+        TestDeviceIds = new List<string> { "DB1F9611-A3BB-4AF4-B169-1CEC9C22B0F6" }
+    };
         color = new Color(1f, 1f, 1f);
 
         _rewardedAdUnitId = "ca-app-pub-9179569099191885/8344969668";
-        _GoOutADSid = "ca-app-pub-9179569099191885/2021864778";
+        _GoOutADSid = "ca-app-pub-9179569099191885/4813922176";
         // Initialize the Google Mobile Ads SDK.
 
         if (Application.internetReachability != NetworkReachability.NotReachable) //인터넷연결된경우?
@@ -62,6 +69,16 @@ public class AdmobADS : MonoBehaviour {
                     PlayerPrefs.SetInt("rewardInvoke_room", 1);
                     Invoke("rewardInvoke", 1f);
                 }
+/*
+                // initStatus 안에 어댑터 목록이 있어야 함
+                Dictionary<string, AdapterStatus> map = initStatus.getAdapterStatusMap();
+                foreach (var keyValuePair in map)
+                {
+                    string className = keyValuePair.Key;
+                    AdapterStatus status = keyValuePair.Value;
+                    Debug.Log($"어댑터: {className}, 상태: {status.InitializationState}");
+                }
+                */
             });
         }
         else
@@ -69,7 +86,15 @@ public class AdmobADS : MonoBehaviour {
             // Debug.Log("No Internet, skip init for now. 인터넷 연결 불가능");
         }
     }
-
+    public void OnButtonClick()
+    {
+        MobileAds.OpenAdInspector((AdInspectorError error) =>
+        {
+            if (error != null)
+                Debug.Log($"Ad Inspector 오류: {error.GetMessage()}");
+            // Error will be set if there was an issue and the inspector was not displayed.
+        });
+    }
     public void rewardInvoke()
     {
         PlayerPrefs.SetInt("rewardInvoke_room", 0);
@@ -259,8 +284,8 @@ public class AdmobADS : MonoBehaviour {
         var adRequest = new AdRequest();
 
         // send the request to load the ad.
-        RewardedInterstitialAd.Load(_GoOutADSid, adRequest,
-            (RewardedInterstitialAd ad, LoadAdError error) =>
+        RewardedAd.Load(_GoOutADSid, adRequest,
+            (RewardedAd ad, LoadAdError error) =>
             {
                 // if error is not null, the load request failed.
                 if (error != null || ad == null)
@@ -272,8 +297,25 @@ public class AdmobADS : MonoBehaviour {
                 //Debug.Log("상태보기 : Rewarded interstitial ad loaded with response : " + ad.GetResponseInfo());
 
                 rewardedInterstitialAd = ad;
+                RegisterEventHandlers2(ad); //이벤트 등록
             });
-        //RegisterEventHandlers(rewardedInterstitialAd); //이벤트 등록
+    }
+
+
+    private void RegisterEventHandlers2(RewardedAd ad)
+    {
+        // Raised when the ad is estimated to have earned money.
+        ad.OnAdPaid += (AdValue adValue) =>
+        {
+            //Debug.Log("광고");
+        };
+
+        ad.OnAdFullScreenContentClosed += () =>
+        {
+                PlayerPrefs.SetInt("bouttime", 9);
+                Toast_obj2.SetActive(true);
+                LoadRewardedInterstitialAd();
+        };
     }
 
 
@@ -288,13 +330,9 @@ public class AdmobADS : MonoBehaviour {
                 se_back2.mute = true;
             rewardedInterstitialAd.Show((Reward reward) =>
             {
-                // TODO: Reward the user.
-                PlayerPrefs.SetInt("bouttime", 9);
-                Toast_obj2.SetActive(true);
-
             se_back.mute = false;
             se_back2.mute = false;
-                LoadRewardedInterstitialAd();
+                // TODO: Reward the user.
             });
         }
         else

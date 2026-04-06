@@ -31,7 +31,7 @@ public class AdmobADSMilk : MonoBehaviour {
     void Start() {
         color = new Color(1f, 1f, 1f);
 
-        _rewardedAdUnitId = "ca-app-pub-9179569099191885/8344969668";
+        _rewardedAdUnitId = "ca-app-pub-9179569099191885/7322972346";
 
        if (Application.internetReachability != NetworkReachability.NotReachable)
         {

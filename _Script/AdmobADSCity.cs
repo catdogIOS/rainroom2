@@ -10,7 +10,7 @@ public class AdmobADSCity : MonoBehaviour {
 
     public AudioSource se_back, se_back2;
     //보상형 전면 광고
-    private RewardedInterstitialAd rewardedInterstitialAd;
+    private RewardedAd rewardedInterstitialAd;
     private string _GoOutADSid;
 
     //영상
@@ -42,7 +42,7 @@ public class AdmobADSCity : MonoBehaviour {
 
 
         _rewardedAdUnitId = "ca-app-pub-9179569099191885/8344969668";
-        _GoOutADSid = "ca-app-pub-9179569099191885/5519050563";
+        _GoOutADSid = "ca-app-pub-9179569099191885/4813922176";
 
         if (Application.internetReachability != NetworkReachability.NotReachable)
         {
@@ -274,8 +274,8 @@ public class AdmobADSCity : MonoBehaviour {
         var adRequest = new AdRequest();
 
         // send the request to load the ad.
-        RewardedInterstitialAd.Load(_GoOutADSid, adRequest,
-            (RewardedInterstitialAd ad, LoadAdError error) =>
+        RewardedAd.Load(_GoOutADSid, adRequest,
+            (RewardedAd ad, LoadAdError error) =>
             {
                 // if error is not null, the load request failed.
                 if (error != null || ad == null)
@@ -287,10 +287,27 @@ public class AdmobADSCity : MonoBehaviour {
                 //Debug.Log("Rewarded interstitial ad loaded with response : " + ad.GetResponseInfo());
 
                 rewardedInterstitialAd = ad;
+                RegisterEventHandlers2(ad); //이벤트 등록
             });
        // RegisterEventHandlers(rewardedInterstitialAd); //이벤트 등록
     }
 
+    private void RegisterEventHandlers2(RewardedAd ad)
+    {
+        // Raised when the ad is estimated to have earned money.
+        ad.OnAdPaid += (AdValue adValue) =>
+        {
+            //Debug.Log("광고");
+        };
+
+        ad.OnAdFullScreenContentClosed += () =>
+        {
+                // TODO: Reward the user.
+                PlayerPrefs.SetInt("seatime", 4);
+                Toast_obj2.SetActive(true);
+                LoadRewardedInterstitialAd();
+        };
+    }
 
     //보상형 전면 광고 보여주기
     public void ShowRewardedInterstitialAd()
@@ -304,10 +321,6 @@ public class AdmobADSCity : MonoBehaviour {
                 se_back2.mute = true;
             rewardedInterstitialAd.Show((Reward reward) =>
             {
-                // TODO: Reward the user.
-                PlayerPrefs.SetInt("seatime", 4);
-                Toast_obj2.SetActive(true);
-                LoadRewardedInterstitialAd();
 
             se_back.mute = false;
             se_back2.mute = false;
