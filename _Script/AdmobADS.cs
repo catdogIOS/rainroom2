@@ -48,10 +48,6 @@ public class AdmobADS : MonoBehaviour {
     // Use this for initialization 앱 ID
     void Start () {
         
-    var reqConfig = new RequestConfiguration
-    {
-        TestDeviceIds = new List<string> { "DB1F9611-A3BB-4AF4-B169-1CEC9C22B0F6" }
-    };
         color = new Color(1f, 1f, 1f);
 
         _rewardedAdUnitId = "ca-app-pub-9179569099191885/8344969668";
@@ -213,7 +209,7 @@ public class AdmobADS : MonoBehaviour {
                         PlayerPrefs.SetInt("talk", 5);
                         if (PlayerPrefs.GetInt("talk", 5) >= 5)
                         {
-                            PlayerPrefs.SetInt("secf", 240);
+                            PlayerPrefs.SetInt("secf", 180);
                         }
                         PlayerPrefs.Save();
                     }
@@ -222,7 +218,7 @@ public class AdmobADS : MonoBehaviour {
                         PlayerPrefs.SetInt("talk", 5);
                         if (PlayerPrefs.GetInt("talk", 5) >= 5)
                         {
-                            PlayerPrefs.SetInt("secf2", 240);
+                            PlayerPrefs.SetInt("secf2", 180);
                         }
                         PlayerPrefs.Save();
                     }
@@ -350,5 +346,10 @@ public class AdmobADS : MonoBehaviour {
         Toast_obj2.SetActive(false);
     }
 
+
+    public void touchToastEvt2()
+    {
+        Toast_obj.SetActive(false);
+    }
 
 }

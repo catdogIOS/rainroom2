@@ -139,7 +139,7 @@ public class AdmobADSCity : MonoBehaviour {
                     PlayerPrefs.SetInt("talk", 5);
                     if (PlayerPrefs.GetInt("talk", 5) >= 5)
                     {
-                        PlayerPrefs.SetInt("secf3", 240);
+                        PlayerPrefs.SetInt("secf3", 180);
                     }
                     ad_obj.SetActive(false);
                 });

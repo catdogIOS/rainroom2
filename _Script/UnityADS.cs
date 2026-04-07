@@ -174,7 +174,7 @@ public class UnityADS : MonoBehaviour
         PlayerPrefs.Save();
         if (PlayerPrefs.GetInt("talk", 5) >= 5)
         {
-            PlayerPrefs.SetInt("secf", 240);
+            PlayerPrefs.SetInt("secf", 180);
         }
     }
 
@@ -364,7 +364,7 @@ public class UnityADS : MonoBehaviour
             PlayerPrefs.Save();
             if (PlayerPrefs.GetInt("talk", 5) >= 5)
             {
-                PlayerPrefs.SetInt("secf", 240);
+                PlayerPrefs.SetInt("secf", 180);
             }
         }
         else
@@ -373,7 +373,7 @@ public class UnityADS : MonoBehaviour
             PlayerPrefs.Save();
             if (PlayerPrefs.GetInt("talk", 5) >= 5)
             {
-                PlayerPrefs.SetInt("secf2", 240);
+                PlayerPrefs.SetInt("secf2", 180);
             }
         }
     }

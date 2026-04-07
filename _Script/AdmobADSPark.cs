@@ -161,7 +161,7 @@ public class AdmobADSPark : MonoBehaviour {
                     PlayerPrefs.SetInt("talk", 5);
                     if (PlayerPrefs.GetInt("talk", 5) >= 5)
                     {
-                        PlayerPrefs.SetInt("secf0", 240);
+                        PlayerPrefs.SetInt("secf0", 180);
                     }
                 });
             }

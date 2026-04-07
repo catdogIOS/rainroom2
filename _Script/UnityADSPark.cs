@@ -205,7 +205,7 @@ public class UnityADSPark : MonoBehaviour
     {
         while (mG2 > -1)
         {
-            sG2 = PlayerPrefs.GetInt("secf2", 240);
+            sG2 = PlayerPrefs.GetInt("secf2", 180);
             //Debug.Log(sG);
             mG2= (int)(sG2 / 60);
             sG2 = sG2 - (sG2 / 60) * 60;
@@ -219,7 +219,7 @@ public class UnityADSPark : MonoBehaviour
                 radio_ani.SetActive(false);
                 adBtn_obj.SetActive(false);
             }
-            sG2 = PlayerPrefs.GetInt("secf2", 240);
+            sG2 = PlayerPrefs.GetInt("secf2", 180);
             sG2 = sG2 - 1;
             if (sG2 < 0)
             {
