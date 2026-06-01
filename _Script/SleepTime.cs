@@ -45,12 +45,12 @@ public class SleepTime : MonoBehaviour
     public Sprite[] sleep1_spr, sleepMax1_spr, sleep2_spr, sleepMax2_spr;
     int m;
     public GameObject exitTalkBalln;
+    public GameObject alarm_obj;
 
     int bed = 0;
     // Use this for initialization
     void Start()
     {
-
         m = PlayerPrefs.GetInt("setbedpalette", 0) + 2;
         n = PlayerPrefs.GetInt("bedlv", 0);
         StartCoroutine("sleepImagechange");
@@ -97,6 +97,7 @@ public class SleepTime : MonoBehaviour
         }
         else
         {
+            PlayerPrefs.SetInt("sleeptimeadsreward", 0);
             PlayerPrefs.SetInt("sleepTxt", 0);
             sleepMax_obj.SetActive(false);
             if (PlayerPrefs.GetInt("showdir", 0) == 1)
@@ -108,6 +109,11 @@ public class SleepTime : MonoBehaviour
 
 
         data_diary = CSVReader.Read("Talk/deardiary"); //대사 불러오기   
+
+        if(PlayerPrefs.GetInt("sleeptimeadsreward", 0) == 99)
+        {
+            alarm_obj.SetActive(false);
+        }
 
     }
 
@@ -214,7 +220,14 @@ public class SleepTime : MonoBehaviour
         {
             switchBtn_obj.SetActive(true);
         }
-
+         if (PlayerPrefs.GetInt("sleeptimeadsreward", 0) == 99)
+    {
+        alarm_obj.SetActive(false);
+    }
+    else
+    {
+        alarm_obj.SetActive(true);
+    }
     }
 
     void SleepTimeFlow()
@@ -238,7 +251,15 @@ public class SleepTime : MonoBehaviour
         minute = (int)compareTime.TotalMinutes;
         minute = minute - (minute / 60) * 60;
         minute = 59 - minute;
+
+    if (PlayerPrefs.GetInt("sleeptimeadsreward", 0) == 99)
+    {
+        hours = 3 - hours;
+    }
+    else
+    {
         hours = 5 - hours;
+    }
         if (minute < 0)
         {
         }
@@ -300,6 +321,8 @@ public class SleepTime : MonoBehaviour
                         rabbitSleep_obj.SetActive(false);
                     }
                     dreamBtn_obj.SetActive(true);
+
+        Invoke("WaitSleep", 1f);
                     int s = PlayerPrefs.GetInt("countinsleepst", 0);
                     s++;
                     PlayerPrefs.SetInt("countinsleepst", s);
@@ -447,4 +470,10 @@ public class SleepTime : MonoBehaviour
         sleepHelp_obj.SetActive(false);
     }
 
+    
+    public void WaitSleep()
+{
+
+    PlayerPrefs.SetInt("sleeptimeadsreward", 0);
+}
 }

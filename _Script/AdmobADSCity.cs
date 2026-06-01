@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using GoogleMobileAds.Api;
 using UnityEngine.UI;
-using GoogleMobileAds.Api.Mediation.IronSource;
 
 
 public class AdmobADSCity : MonoBehaviour {

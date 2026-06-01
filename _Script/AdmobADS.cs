@@ -4,7 +4,6 @@ using UnityEngine;
 using GoogleMobileAds.Api;
 using UnityEngine.UI;
 using System;
-using GoogleMobileAds.Api.Mediation.IronSource;
 using GoogleMobileAds.Api.Mediation.UnityAds;
 using Unity.Advertisement.IosSupport;
 
@@ -35,7 +34,6 @@ public class AdmobADS : MonoBehaviour {
     {
         if (Application.internetReachability != NetworkReachability.NotReachable)
         {
-        GoogleMobileAds.Mediation.IronSource.Api.IronSource.SetMetaData("do_not_sell", "true");
         GoogleMobileAds.Mediation.UnityAds.Api.UnityAds.SetConsentMetaData("gdpr.consent", true);
         GoogleMobileAds.Mediation.UnityAds.Api.UnityAds.SetConsentMetaData("privacy.consent", true);
         }
