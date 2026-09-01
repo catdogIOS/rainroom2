@@ -76,7 +76,7 @@ public class GasrangeEvt : MonoBehaviour {
         colorC = new Color(1f, 1f, 1f);
         color = new Color(1f, 1f, 1f);
         CheckIng();
-        data = CSVReader.Read("material");
+        csvvreader();
 
         //시즌이벤트
         if (PlayerPrefs.GetInt("putfallleaf", 0) == 1)
@@ -145,6 +145,11 @@ public class GasrangeEvt : MonoBehaviour {
         }
     }
 
+async void csvvreader()
+{
+    data = await CSVReader.ReadAsync("Assets/csv/material.csv");
+
+}
 #region
     public void indexNumber0()
     {
@@ -818,8 +823,17 @@ public class GasrangeEvt : MonoBehaviour {
         endWindow_obj.SetActive(false);
         audio_obj.GetComponent<SoundEvt>().cancleSound();
         //소리
-        m_end.clip = sp_original;
-        m_end.Play();
+             GameObject soundObj = GameObject.Find("SoundControl");
+
+        if (soundObj != null)
+        {
+            SoundHandler handler = soundObj.GetComponent<SoundHandler>();
+
+            if (handler != null && sp_original != null)
+            {
+                handler.ChangeBGM(sp_original);
+            }
+        }
     }
 
     public void endR()

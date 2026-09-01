@@ -92,11 +92,21 @@ public class MountianFunction : MonoBehaviour {
         }
     }
 
+async void csvvreader()
+{
+    data_sign = await CSVReader.ReadAsync("Assets/csv/sign_park.csv");
+
+}
 
     List<Dictionary<string, object>> data;
     // Use this for initialization
     void Start()
     {
+        if(SoundHandler.instance != null)
+        {
+            SoundHandler.instance.SetMute(false);
+            if(SoundHandler.instance.BGM != null) SoundHandler.instance.BGM.mute = true;
+        }
         //계절체크
         string mon = System.DateTime.Now.ToString("MM");
 
@@ -139,8 +149,9 @@ public class MountianFunction : MonoBehaviour {
 
         PlayerPrefs.SetString("outlasttimepark", System.DateTime.UtcNow.ToString());
         PlayerPrefs.SetInt("foresttime", 9);
-        data_sign = CSVReader.Read("Talk/sign_park");
-        signText();
+        
+        csvvreader();
+        Invoke("signText",1f);
 
         //상자 안에              /12그림/ 관련 리폼색이                들어있어
         //슬슬 돌아가야겠다.
@@ -565,6 +576,10 @@ public class MountianFunction : MonoBehaviour {
     IEnumerator LoadOut()
     {
         async = SceneManager.LoadSceneAsync("SubLoadOut");
+        if(SoundHandler.instance != null)
+        {
+            SoundHandler.instance.SetMute(true);
+        }
         while (!async.isDone)
         {
             yield return true;

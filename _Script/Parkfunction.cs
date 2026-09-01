@@ -52,6 +52,10 @@ public class Parkfunction : CavasData
 
     private void Awake()
     {
+        if(SoundHandler.instance != null)
+        {
+            SoundHandler.instance.SetMute(false);
+        } 
         //초기화
         str = PlayerPrefs.GetString("code", "");
         colorP = new Color(1f, 1f, 1f);
@@ -75,7 +79,7 @@ public class Parkfunction : CavasData
         //외출업적
         if (PlayerPrefs.GetInt("acgocheck", 0) == 1)
         {
-            checkachOut();
+            Invoke("checkachOut", 0.5f);
             PlayerPrefs.SetInt("acgocheck", 0);
         }
         
@@ -346,8 +350,17 @@ public class Parkfunction : CavasData
             GMP.GetComponent<EndingBox>().PlayEnd();
             GMP.GetComponent<EndingBox>().end_ani.Play("endPark1", -1, 0f);
             //소리
-            m_end.clip = sp_end;
-            m_end.Play();
+            GameObject soundObj = GameObject.Find("SoundControl");
+
+        if (soundObj != null)
+        {
+            SoundHandler handler = soundObj.GetComponent<SoundHandler>();
+
+            if (handler != null && sp_end != null)
+            {
+                handler.ChangeBGM(sp_end);
+            }
+        }
             if (GMP.GetComponent<EndingBox>().shopNum == 5 || GMP.GetComponent<EndingBox>().shopNum == 6)
             {
                 GMP.GetComponent<EndingBox>().side_obj.SetActive(false);
@@ -365,8 +378,17 @@ public class Parkfunction : CavasData
         audio_obj.GetComponent<SoundEvt>().cancleSound();
 
         //소리
-        m_end.clip = sp_original;
-        m_end.Play();
+        GameObject soundObj = GameObject.Find("SoundControl");
+
+        if (soundObj != null)
+        {
+            SoundHandler handler = soundObj.GetComponent<SoundHandler>();
+
+            if (handler != null && sp_original != null)
+            {
+                handler.ChangeBGM(sp_original);
+            }
+        }
     }
 
     public void endR()
@@ -482,6 +504,11 @@ public class Parkfunction : CavasData
             //checkachOut();
             StartCoroutine("LoadOut");
             audio_obj.GetComponent<SoundEvt>().buttonSound();
+
+        if(SoundHandler.instance != null)
+        {
+            SoundHandler.instance.SetMute(true);
+        }
         }
         else
         {

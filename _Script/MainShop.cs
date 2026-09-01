@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 public class MainShop : ShopHandler {
     public GameObject GM, loadGM, GMtag, GM2;
@@ -97,12 +98,23 @@ public class MainShop : ShopHandler {
         GM = GameObject.FindGameObjectWithTag("firstroomGM");
         GM2 = GameObject.FindGameObjectWithTag("GM2");
         loadGM =GameObject.FindGameObjectWithTag("loadGM");
-        data_cPrice = CSVReader.Read("Price/f_coldrain");
-        data_hPrice = CSVReader.Read("Price/f_hotrain");
-        data_itemName = CSVReader.Read("Price/f_itemname");
+        csvvreader();
 
     }
 
+async void csvvreader()
+{
+        data_cPrice = await CSVReader.ReadAsync("Assets/csv/f_coldrain.csv");
+        data_hPrice = await CSVReader.ReadAsync("Assets/csv/f_hotrain.csv");
+        data_itemName = await CSVReader.ReadAsync("Assets/csv/f_itemname.csv");
+}
+
+async void csvvreader2()
+{
+        data_cPrice = await CSVReader.ReadAsync("Assets/csv/f_coldrain.csv");
+        data_hPrice = await CSVReader.ReadAsync("Assets/csv/f_hotrain.csv");
+
+}
     public void ShopCoinLoad(){
         checkMaxtresure();
         if (GM == null)
@@ -110,9 +122,7 @@ public class MainShop : ShopHandler {
             GM = GameObject.FindGameObjectWithTag("firstroomGM");
             loadGM = GameObject.FindGameObjectWithTag("loadGM");
             GM2 = GameObject.FindGameObjectWithTag("GM2");
-            data_cPrice = CSVReader.Read("Price/f_coldrain");
-            data_hPrice = CSVReader.Read("Price/f_hotrain");
-            data_itemName = CSVReader.Read("Price/f_itemname");
+            csvvreader();
         }
         
         if (PlayerPrefs.GetInt("unlockshop", 0) == 10)
@@ -364,8 +374,7 @@ public class MainShop : ShopHandler {
             GM = GameObject.FindGameObjectWithTag("firstroomGM");
             loadGM = GameObject.FindGameObjectWithTag("loadGM");
             GM2 = GameObject.FindGameObjectWithTag("GM2");
-            data_cPrice = CSVReader.Read("Price/f_coldrain");
-            data_hPrice = CSVReader.Read("Price/f_hotrain");
+            csvvreader2();
         }
         for (int i = 0; i < 12; i++)
         {

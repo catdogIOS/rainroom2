@@ -10,7 +10,7 @@ public class DataHandler : MonoBehaviour {
 	void Awake(){
 		canvas_obj = GameObject.Find ("MainCanvas");
         blackCanvas_obj=GameObject.Find("검은화면캔버스");
-		        memoCanvas_obj = GameObject.FindWithTag("쪽지Canvas");
+		memoCanvas_obj = GameObject.FindWithTag("쪽지Canvas");
 
     }
 	// Use this for initialization
@@ -18,7 +18,7 @@ public class DataHandler : MonoBehaviour {
 		
 		canvas_obj.GetComponent<Canvas>().worldCamera = Main_camera;
         blackCanvas_obj.GetComponent<Canvas>().worldCamera = Main_camera;
-		        memoCanvas_obj.GetComponent<Canvas>().worldCamera = Main_camera;
+		memoCanvas_obj.GetComponent<Canvas>().worldCamera = Main_camera;
     }
 	
 

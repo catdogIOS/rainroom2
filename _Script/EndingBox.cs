@@ -272,8 +272,7 @@ public class EndingBox : MonoBehaviour {
         page = 0;
         endBack_obj.SetActive(true);
         //소리
-        m_end.clip = sp_end;
-        m_end.Play();
+        soundChange(sp_end);
         SumPage();
         endL_obj.SetActive(false);
         endClose_obj.SetActive(false);
@@ -295,8 +294,7 @@ public class EndingBox : MonoBehaviour {
     {
         endBack_obj.SetActive(true);
         //소리
-        m_end.clip = sp_end;
-        m_end.Play();
+        soundChange(sp_end);
         endL_obj.SetActive(false);
         endClose_obj.SetActive(false);
         endR_obj.SetActive(true);
@@ -316,8 +314,7 @@ public class EndingBox : MonoBehaviour {
         audio_obj.GetComponent<SoundEvt>().cancleSound();
         endBack_obj.SetActive(false);
         //소리
-        m_end.clip = sp_original;
-        m_end.Play();
+        soundChange(sp_original);
         end_i = 0;
         if (room == 5)
         {
@@ -404,6 +401,21 @@ public class EndingBox : MonoBehaviour {
             case 8:
                 page = 2;
                 break;
+        }
+    }
+
+    void soundChange(AudioClip changes)
+    {
+        GameObject soundObj = GameObject.Find("SoundControl");
+
+        if (soundObj != null)
+        {
+            SoundHandler handler = soundObj.GetComponent<SoundHandler>();
+
+            if (handler != null && changes != null)
+            {
+                handler.ChangeBGM(changes);
+            }
         }
     }
 }

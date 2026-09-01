@@ -51,6 +51,11 @@ public class CityFunction : CavasData
 
     // Use this for initialization
     void Start () {
+
+        if(SoundHandler.instance != null)
+        {
+            SoundHandler.instance.SetMute(false);
+        }
         outGo_obj.GetComponent<Button>().interactable = true;
 
         color = new Color(1f, 1f, 1f);
@@ -85,7 +90,7 @@ public class CityFunction : CavasData
         //외출업적
         if (PlayerPrefs.GetInt("acgocheck", 0) == 1)
         {
-            checkachOut();
+            Invoke("checkachOut", 0.5f);
             PlayerPrefs.SetInt("acgocheck", 0);
         }
         //도시에 처음 왔을때
@@ -233,8 +238,17 @@ public class CityFunction : CavasData
         audio_obj.GetComponent<SoundEvt>().cancleSound();
 
         //소리
-        m_end.clip = sp_original;
-        m_end.Play();
+        GameObject soundObj = GameObject.Find("SoundControl");
+
+        if (soundObj != null)
+        {
+            SoundHandler handler = soundObj.GetComponent<SoundHandler>();
+
+            if (handler != null && sp_original != null)
+            {
+                handler.ChangeBGM(sp_original);
+            }
+        }
     }
 
     public void endR()
@@ -356,6 +370,10 @@ public class CityFunction : CavasData
             hPrice_txt.text = "" + PlayerPrefs.GetInt(str + "h", 0);
             StartCoroutine("LoadOut");
             audio_obj.GetComponent<SoundEvt>().buttonSound();
+        if(SoundHandler.instance != null)
+        {
+            SoundHandler.instance.SetMute(true);
+        }
         }
         else
         {

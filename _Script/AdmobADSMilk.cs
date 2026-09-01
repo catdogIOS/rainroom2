@@ -38,7 +38,7 @@ public class AdmobADSMilk : MonoBehaviour {
             if (PlayerPrefs.GetInt("rewardInvoke_milk", 0) == 0)
             {
                 PlayerPrefs.SetInt("rewardInvoke_milk", 1);
-                Invoke("rewardInvoke", 1.5f);
+                Invoke("rewardInvoke_milk", 1.5f);
             }
         }
         else

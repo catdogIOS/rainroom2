@@ -75,9 +75,6 @@ public class WindowMiniGame : MonoBehaviour {
         PlayerPrefs.SetInt("miniopen", 0);
         PlayerPrefs.SetInt("windowcatrand", 19);
 
-        data_milk = CSVReader.Read("Talk/todaymilk");
-
-
         if (PlayerPrefs.GetInt("windowsumm21", 0) == 1)
         {
             season_btns[1].SetActive(true);
@@ -111,9 +108,12 @@ public class WindowMiniGame : MonoBehaviour {
         }
         PlayerPrefs.Save();
 
-        data_milk = CSVReader.Read("Talk/todaymilk");
+        csvvreader();
     }
-
+async void csvvreader()
+    {
+        data_milk = await CSVReader.ReadAsync("Assets/csv/todaymilk.csv");
+    }
     public void showSeasonChange()
     {
         if (PlayerPrefs.GetInt("windowLeafCK", 0) == 0)
@@ -491,8 +491,17 @@ public void OpenMiniGame()
         Audio_obj.GetComponent<SoundEvt>().cancleSound();
 
         //소리
-        m_end.clip = sp_original;
-        m_end.Play();
+        GameObject soundObj = GameObject.Find("SoundControl");
+
+        if (soundObj != null)
+        {
+            SoundHandler handler = soundObj.GetComponent<SoundHandler>();
+
+            if (handler != null && sp_original != null)
+            {
+                handler.ChangeBGM(sp_original);
+            }
+        }
     }
 
     public void endR()

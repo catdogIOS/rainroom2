@@ -106,9 +106,7 @@ public class SleepTime : MonoBehaviour
 
             }
         }
-
-
-        data_diary = CSVReader.Read("Talk/deardiary"); //대사 불러오기   
+        csvvreader();   
 
         if(PlayerPrefs.GetInt("sleeptimeadsreward", 0) == 99)
         {
@@ -116,6 +114,12 @@ public class SleepTime : MonoBehaviour
         }
 
     }
+
+async void csvvreader()
+{
+    data_diary = await CSVReader.ReadAsync("Assets/csv/deardiary.csv");
+
+}
 
     public void TurnOnSwitch()
     {
@@ -265,6 +269,7 @@ public class SleepTime : MonoBehaviour
         }
     }
 
+    
     //매초시간흐르게
     IEnumerator sleepTimecheck()
     {
@@ -321,9 +326,25 @@ public class SleepTime : MonoBehaviour
                         rabbitSleep_obj.SetActive(false);
                     }
                     dreamBtn_obj.SetActive(true);
+                    Invoke("achevement", 0.5f);
+                    exitTalkBalln.SetActive(false);
+                    Invoke("WaitSleep", 1f);
+                }
+                PlayerPrefs.SetInt("nowsleep", 0);
+                PlayerPrefs.SetInt("sleepTxt", 0);
+               // PlayerPrefs.Save();
 
-        Invoke("WaitSleep", 1f);
-                    int s = PlayerPrefs.GetInt("countinsleepst", 0);
+            }
+            else
+            {
+                sleepTime_txt.text = str;
+            }
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+    void achevement()
+    {
+        int s = PlayerPrefs.GetInt("countinsleepst", 0);
                     s++;
                     PlayerPrefs.SetInt("countinsleepst", s);
                     if (s >= 50 && PlayerPrefs.GetInt("insleepst", 0) < 3)
@@ -341,20 +362,6 @@ public class SleepTime : MonoBehaviour
                         PlayerPrefs.SetInt("insleepst", 1);
                         firstGM.GetComponent<AchievementShow>().achievementCheck(5, 0);
                     }
-
-                    exitTalkBalln.SetActive(false);
-                }
-                PlayerPrefs.SetInt("nowsleep", 0);
-                PlayerPrefs.SetInt("sleepTxt", 0);
-               // PlayerPrefs.Save();
-
-            }
-            else
-            {
-                sleepTime_txt.text = str;
-            }
-            yield return new WaitForSeconds(0.1f);
-        }
     }
 
     //꿈일기 창띄우기

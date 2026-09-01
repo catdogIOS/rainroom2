@@ -1802,6 +1802,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 297058862}
   m_CullTransparentMesh: 0
+--- !u!1 &353257491
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 353257493}
+  - component: {fileID: 353257492}
+  m_Layer: 0
+  m_Name: BGM_Setup
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &353257492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 353257491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33359d4384f9a4516af9e135db6d1415, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneMusic: {fileID: 0}
+  RainMusic: {fileID: 8300000, guid: ff17d772ad225d0428bdc21d5cc81f3f, type: 3}
+--- !u!4 &353257493
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 353257491}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.6894623, y: -0.4023775, z: 0.04281271}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &365005793
 GameObject:
   m_ObjectHideFlags: 0
@@ -3991,7 +4037,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!82 &726921348
 AudioSource:
   m_ObjectHideFlags: 0
@@ -9866,7 +9912,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1628372896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11637,7 +11683,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!82 &1843046313
 AudioSource:
   m_ObjectHideFlags: 0
@@ -13260,6 +13306,7 @@ MonoBehaviour:
   Main_camera: {fileID: 1609354257}
   canvas_obj: {fileID: 0}
   blackCanvas_obj: {fileID: 0}
+  memoCanvas_obj: {fileID: 0}
 --- !u!114 &2128228832
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13776,3 +13823,4 @@ SceneRoots:
   - {fileID: 170030262}
   - {fileID: 1815270186}
   - {fileID: 207261001}
+  - {fileID: 353257493}

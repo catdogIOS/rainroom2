@@ -120,6 +120,11 @@ public class FirstRoomFunction : CavasData {
 
     // Use this for initialization
     void Start () {
+
+        if(SoundHandler.instance != null)
+        {
+            SoundHandler.instance.SetMute(false);
+        }
         PlayerPrefs.SetInt("parkgock",0);
         PlayerPrefs.SetInt("rewardInvoke_room", 0);
         PlayerPrefs.SetInt("rewardInvoke_city", 0);
@@ -288,6 +293,10 @@ public class FirstRoomFunction : CavasData {
     public void OutAgainY()
     {
 
+        if(SoundHandler.instance != null)
+        {
+            SoundHandler.instance.SetMute(true);
+        }
         if (PlayerPrefs.GetInt("outorhome", 0) == 2)
         {
             PlayerPrefs.SetInt("outtrip", 2);

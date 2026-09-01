@@ -81,6 +81,8 @@ public class TalkEvt : MonoBehaviour {
 
     int etcNum = 0;
 
+    int cnt = 0;
+    string[] lineStr;
     // Use this for initialization
     void Start ()
     {
@@ -90,15 +92,19 @@ public class TalkEvt : MonoBehaviour {
         countTalkNum = PlayerPrefs.GetInt("talk", 5);
         callTalkBook();
         callTalkItem();
-        data = CSVReader.Read("Talk/talk_room"); //대사 불러오기   
-        data_book = CSVReader.Read("Talk/talk_book"); 
-        data_light = CSVReader.Read("Talk/talk_light"); 
-        data_seed = CSVReader.Read("Talk/talk_seed"); 
-        data_wall = CSVReader.Read("Talk/talk_wall"); 
-        data_window = CSVReader.Read("Talk/talk_window");
-        data_evt_spring = CSVReader.Read("Talk/etc_room");
-        data_pet = CSVReader.Read("Talk/talk_pet");
+        csvvreader();
         setCharAni();
+    }
+async void csvvreader()
+    {
+            data = await CSVReader.ReadAsync("Assets/csv/talk_room.csv"); //대사 불러오기   
+            data_book = await CSVReader.ReadAsync("Assets/csv/talk_book.csv");
+            data_light = await CSVReader.ReadAsync("Assets/csv/talk_light.csv");
+            data_seed = await CSVReader.ReadAsync("Assets/csv/talk_seed.csv");
+            data_wall = await CSVReader.ReadAsync("Assets/csv/talk_wall.csv");
+            data_window = await CSVReader.ReadAsync("Assets/csv/talk_window.csv");
+            data_evt_spring = await CSVReader.ReadAsync("Assets/csv/etc_room.csv");
+            data_pet = await CSVReader.ReadAsync("Assets/csv/talk_pet.csv");
     }
 
     //게임종료-------
@@ -321,16 +327,15 @@ public class TalkEvt : MonoBehaviour {
 
             checkach();//업적체크
             lovetalk();
-            testText_cut = text_str.Split('/'); //끊기
-            cleantalk();
-
-            if (testText_cut[0] == "q")
+            Text_obj.text = "";        
+            if (text_str.Contains("^"))
             { //질문이 있는경우
-                StartCoroutine("questionTalkRun");
+                lineStr = text_str.ToString().Split('|'); // 0:질문 1:대답버튼 2:1번의 대답 3:대답버튼 4:3번의 대답  
+                StartCoroutine(questionTalkRun());
             }
             else
             {
-                StartCoroutine("talkRun");
+                StartCoroutine(talkRun());
             }
             countTalk();
             //경험치
@@ -418,79 +423,119 @@ public class TalkEvt : MonoBehaviour {
         }
     }
 
-    //대사 출력
-    IEnumerator talkRun()
+    
+    IEnumerator talkRun() // 딱딱 대화 형식
     {
+        //대화속도
+        speedF = PlayerPrefs.GetFloat("talkspeed", 0.05f);
         falseObject();
-        for (int i = 0; i < testText_cut.Length; i++)
+        cnt = 0;
+        while (cnt != text_str.Length)
         {
-                text_str = text_str.Insert(text_str.Length, testText_cut[i]);
-                Text_obj.text = text_str;
+            // 1. 현재 출력할 문자 확인
+            char currentChar = text_str[cnt];
+            Text_obj.text += currentChar.ToString();
+            cnt++;
+
+            // 2. 문자에 따라 대기 시간 다르게 설정
+            if (currentChar == '.' || currentChar == ',' || currentChar == '!' || currentChar == '?')
+            {
+                yield return new WaitForSeconds(speedF * 10f);
+            }
+            else
+            {
+                // 일반 글자일 때는 원래 속도대로 출력
                 yield return new WaitForSeconds(speedF);
+            }
         }
         trueObject();
     }
 
-    //질문 출력
     IEnumerator questionTalkRun()
     {
+        //대화속도
+        speedF = PlayerPrefs.GetFloat("talkspeed", 0.05f);
         falseObject();
         closeTB.SetActive(false);
         quesBack.SetActive(true);
         quesStr = " ";
-        for (int i = 0; i < testText_cut.Length; i++)
+        btnTxt1.text = "";
+        btnTxt2.text = "";
+        cnt = 1;
+        while (cnt != lineStr[0].Length)
         {
-            quesStr = quesStr.Insert(quesStr.Length, testText_cut[i]);
-        }
+            // 1. 현재 출력할 문자 확인
+            char currentChar = lineStr[0][cnt];
+            Text_obj.text += currentChar.ToString();
+            cnt++;
 
-        for (int i = 1; i < testText_cut.Length; i++)
-        {
-            text_str = text_str.Insert(text_str.Length, testText_cut[i]);
-
-            if (text_str.Contains("y"))
-            { 
-                string str, str2;
-                str = quesStr.Substring(quesStr.IndexOf("y") + 1, 4);
-                btnTxt1.text = str;
-                str2 = quesStr.Substring(quesStr.IndexOf("n") + 1, 4);
-                btnTxt2.text = str2;                
+            // 2. 문자에 따라 대기 시간 다르게 설정
+            if (currentChar == '.' || currentChar == ',' || currentChar == '!' || currentChar == '?')
+            {
+                // 쉼표나 마침표, 느낌표 등에서는 한 템포 더 길게 쉼 (예: 기본 속도의 3배)
+                yield return new WaitForSeconds(speedF * 10f);
             }
             else
             {
-                Text_obj.text = text_str;
+                // 일반 글자일 때는 원래 속도대로 출력
                 yield return new WaitForSeconds(speedF);
             }
         }
+
+        btnTxt1.text += lineStr[1].ToString();
+        btnTxt2.text += lineStr[3].ToString();
+
         quesBtmArea.SetActive(true);
     }
-
-    //선택한 질문 출력
     IEnumerator choiceTextRun()
     {
+        //대화속도
+        speedF = PlayerPrefs.GetFloat("talkspeed", 0.05f);
         falseObject();
 
         quesStr = " ";
-        for (int i = 0; i < testText_cut.Length; i++)
-        {
-            quesStr = quesStr.Insert(quesStr.Length, testText_cut[i]);            
-        }        
+        cnt = 0;
 
         if (choiceNum == 1)
         {
-            for (int i = quesStr.IndexOf("a"); i < quesStr.IndexOf("b")-1; i++)
+            while (cnt != lineStr[2].Length)
             {
-                text_str = text_str.Insert(text_str.Length, testText_cut[i]);
-                Text_obj.text = text_str;
-                yield return new WaitForSeconds(speedF);
+                // 1. 현재 출력할 문자 확인
+                char currentChar = lineStr[2][cnt];
+                Text_obj.text += currentChar.ToString();
+                cnt++;
+
+                // 2. 문자에 따라 대기 시간 다르게 설정
+                if (currentChar == '.' || currentChar == ',' || currentChar == '!' || currentChar == '?')
+                {
+                    yield return new WaitForSeconds(speedF * 10f);
+                }
+                else
+                {
+                    // 일반 글자일 때는 원래 속도대로 대기
+                    yield return new WaitForSeconds(speedF);
+                }
             }
         }
         else if (choiceNum == 2)
         {
-            for (int i = quesStr.IndexOf("c"); i < quesStr.IndexOf("d")-1; i++)
-            { 
-                text_str = text_str.Insert(text_str.Length, testText_cut[i]);
-                Text_obj.text = text_str;
-                yield return new WaitForSeconds(speedF);
+            while (cnt != lineStr[4].Length)
+            {
+                // 1. 현재 출력할 문자 확인
+                char currentChar = lineStr[4][cnt];
+                Text_obj.text += currentChar.ToString();
+                cnt++;
+
+                // 2. 문자에 따라 대기 시간 다르게 설정
+                if (currentChar == '.' || currentChar == ',' || currentChar == '!' || currentChar == '?')
+                {
+                    yield return new WaitForSeconds(speedF * 10f);
+                }
+                else
+                {
+                    // 일반 글자일 때는 원래 속도대로 대기
+                    yield return new WaitForSeconds(speedF);
+                }
             }
         }
         trueObject();
@@ -719,12 +764,10 @@ public class TalkEvt : MonoBehaviour {
 
     public void talkTurtle()
     {
-        text_str = "" + data_pet[etcNum]["turtle"];
-        testText_cut = text_str.Split('/');
-
-        StopCoroutine("itemTalkRun");
-        StartCoroutine("itemTalkRun");
         cleantalk();
+        text_str = "" + data_pet[etcNum]["turtle"];
+        StopCoroutine("talkRun");
+        StartCoroutine("talkRun");
         if (etcNum >= 4)
         {
             etcNum = 0;
@@ -737,12 +780,10 @@ public class TalkEvt : MonoBehaviour {
 
     public void talkRabbit()
     {
-        text_str = "" + data_pet[etcNum]["rabbit"];
-        testText_cut = text_str.Split('/');
-
-        StopCoroutine("itemTalkRun");
-        StartCoroutine("itemTalkRun");
         cleantalk();
+        text_str = "" + data_pet[etcNum]["rabbit"];
+        StopCoroutine("talkRun");
+        StartCoroutine("talkRun");
         if (etcNum >= 4)
         {
             etcNum = 0;
@@ -754,13 +795,11 @@ public class TalkEvt : MonoBehaviour {
     }
 
     public void talkFish()
-    {
-        text_str = "" + data_pet[etcNum]["fish"];
-        testText_cut = text_str.Split('/');
-
-        StopCoroutine("itemTalkRun");
-        StartCoroutine("itemTalkRun");
+    {       
         cleantalk();
+        text_str = "" + data_pet[etcNum]["fish"];
+        StopCoroutine("talkRun");
+        StartCoroutine("talkRun");
         if (etcNum >= 4)
         {
             etcNum = 0;
@@ -773,12 +812,10 @@ public class TalkEvt : MonoBehaviour {
 
     public void talkMmarimo()
     {
-        text_str = "" + data_pet[etcNum]["marimo"];
-        testText_cut = text_str.Split('/');
-
-        StopCoroutine("itemTalkRun");
-        StartCoroutine("itemTalkRun");
         cleantalk();
+        text_str = "" + data_pet[etcNum]["marimo"];
+        StopCoroutine("talkRun");
+        StartCoroutine("talkRun");
         if (etcNum >= 4)
         {
             etcNum = 0;
@@ -803,46 +840,40 @@ public class TalkEvt : MonoBehaviour {
     {
         callTalkItem();
         itemLineReload(299); 
-        text_str = "" + data_book[itemNowArr]["book" + itemLv[0]];
-        testText_cut = text_str.Split('/');
         cleantalk();
-        
-        StopCoroutine("itemTalkRun");
-        StartCoroutine("itemTalkRun");
+        text_str = "" + data_book[itemNowArr]["book" + itemLv[0]];
+        StopCoroutine("talkRun");
+        StartCoroutine("talkRun");
     }
 
     public void talkWall()
     {
         callTalkItem();
         itemLineReload(304);
-        text_str = "" + data_wall[itemNowArr]["wall" + itemLv[1]];
-        testText_cut = text_str.Split('/');
         cleantalk();
-
-        StopCoroutine("itemTalkRun");
-        StartCoroutine("itemTalkRun");
+        text_str = "" + data_wall[itemNowArr]["wall" + itemLv[1]];
+        StopCoroutine("talkRun");
+        StartCoroutine("talkRun");
     }
     
     public void talkLight()
     {
         callTalkItem();
         itemLineReload(376);
-        text_str = "" + data_light[itemNowArr]["light" + itemLv[2]];
-        testText_cut = text_str.Split('/');
         cleantalk();
-        
-        StartCoroutine("itemTalkRun");
+        text_str = "" + data_light[itemNowArr]["light" + itemLv[2]];
+        StopCoroutine("talkRun");
+        StartCoroutine("talkRun");
     }
 
     public void talkWindow()
     {
         callTalkItem();
         itemLineReload(472);
-        text_str = "" + data_window[itemNowArr]["window" + itemLv[3]];
-        testText_cut = text_str.Split('/');
         cleantalk();
-        
-        StartCoroutine("itemTalkRun");
+        text_str = "" + data_window[itemNowArr]["window" + itemLv[3]];
+        StopCoroutine("talkRun");
+        StartCoroutine("talkRun");
     }
 
     public void talkSeed()
@@ -853,11 +884,11 @@ public class TalkEvt : MonoBehaviour {
         }
         callTalkItem();
         itemLineReload(289);
-        text_str = "" + data_seed[itemNowArr]["seed" + itemLv[4]];
-        testText_cut = text_str.Split('/');
-        cleantalk();
 
-        StartCoroutine("itemTalkRun");
+        cleantalk();
+        text_str = "" + data_seed[itemNowArr]["seed" + itemLv[4]];
+        StopCoroutine("talkRun");
+        StartCoroutine("talkRun");
     }
     void achvcheck()
     {
@@ -868,23 +899,6 @@ public class TalkEvt : MonoBehaviour {
             firstGM.GetComponent<AchievementShow>().achievementCheck(25, 0);
         }
     }
-
-
-        //아이템대사 출력
-        IEnumerator itemTalkRun()
-    {
-        speedF = PlayerPrefs.GetFloat("talkspeed", 0.05f);
-        falseObject();
-        for (int i = 0; i < testText_cut.Length; i++)
-        {
-            text_str = text_str.Insert(text_str.Length, testText_cut[i]);
-            Text_obj.text = text_str;
-            yield return new WaitForSeconds(speedF);
-        }
-
-        trueObject();
-    }
-
 
     //범위 설정 다시하기
     public void bookAllArr()
@@ -1203,8 +1217,17 @@ public class TalkEvt : MonoBehaviour {
         Audio_obj.GetComponent<SoundEvt>().cancleSound();
 
         //소리
-        m_end.clip = sp_original;
-        m_end.Play();
+        GameObject soundObj = GameObject.Find("SoundControl");
+
+        if (soundObj != null)
+        {
+            SoundHandler handler = soundObj.GetComponent<SoundHandler>();
+
+            if (handler != null && sp_original != null)
+            {
+                handler.ChangeBGM(sp_original);
+            }
+        }
     }
 
     public void endR2()
@@ -1392,13 +1415,11 @@ public class TalkEvt : MonoBehaviour {
 
     public void talkEvtSpring()
     {
-
-        text_str = "" + data_evt_spring[etcNum]["벚꽃가지"];
-        testText_cut = text_str.Split('/');
-
-        StopCoroutine("itemTalkRun");
-        StartCoroutine("itemTalkRun");
         cleantalk();
+        text_str = "" + data_evt_spring[etcNum]["stick"];
+        StopCoroutine("talkRun");
+        StartCoroutine("talkRun");
+
         if (etcNum >= 4)
         {
             etcNum = 0;

@@ -162,6 +162,12 @@ public class secondRoomFunction : CavasData
     {
         outGo_obj.GetComponent<Button>().interactable = true;
 
+        if(SoundHandler.instance != null)
+        {
+            SoundHandler.instance.SetMute(false);
+            SoundHandler.instance.BGM.Play();
+        }
+
         PlayerPrefs.SetInt("adrunout", 0);
         //외출시 스페이드 얻기 초기화
         PlayerPrefs.SetInt("outspade", 2);
@@ -1199,6 +1205,10 @@ public class secondRoomFunction : CavasData
             //checkachOut();
             StartCoroutine("LoadOut");
             GMTag.GetComponent<MainBtnEvt>().menuBack_obj.GetComponent<Image>().sprite = menuOut_spr;
+        if(SoundHandler.instance != null)
+        {
+            SoundHandler.instance.SetMute(true);
+        }
         }
         else
         {
@@ -1427,8 +1437,17 @@ public class secondRoomFunction : CavasData
         else if(PlayerPrefs.GetInt("endafter", 0) == 1)
         {
             //소리
-            m_end.clip = sp_end;
-            m_end.Play();
+            GameObject soundObj = GameObject.Find("SoundControl");
+
+        if (soundObj != null)
+        {
+            SoundHandler handler = soundObj.GetComponent<SoundHandler>();
+
+            if (handler != null && sp_end != null)
+            {
+                handler.ChangeBGM(sp_end);
+            }
+        }
             endWindow_obj.SetActive(true);
         }
     }
