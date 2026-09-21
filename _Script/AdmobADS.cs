@@ -150,8 +150,10 @@ public class AdmobADS : MonoBehaviour {
 
     void giveMeReward()
     {
-        se_back.mute = false;
-        se_back2.mute = false;
+        if(SoundHandler.instance != null)
+        {
+            SoundHandler.instance.SetMute(false);
+        }
         Toast_obj.SetActive(true);
         PlayerPrefs.SetInt("adrunout", 0);
         Toast_txt.text = "대화 횟수가 5로 다시 복구되었다.";
@@ -197,8 +199,10 @@ public class AdmobADS : MonoBehaviour {
             if (rewardedAd != null && rewardedAd.CanShowAd())
             {
 
-                se_back.mute = true;
-                se_back2.mute = true;
+        if(SoundHandler.instance != null)
+        {
+            SoundHandler.instance.SetMute(true);
+        }
                 rewardedAd.Show((Reward reward) =>
                 {
                     PlayerPrefs.SetInt("adrunout", 0);
@@ -320,12 +324,16 @@ public class AdmobADS : MonoBehaviour {
 
         if (rewardedInterstitialAd != null&& rewardedInterstitialAd.CanShowAd())
         {
-                se_back.mute = true;
-                se_back2.mute = true;
+        if(SoundHandler.instance != null)
+        {
+            SoundHandler.instance.SetMute(true);
+        }
             rewardedInterstitialAd.Show((Reward reward) =>
             {
-            se_back.mute = false;
-            se_back2.mute = false;
+        if(SoundHandler.instance != null)
+        {
+            SoundHandler.instance.SetMute(false);
+        }
                 // TODO: Reward the user.
             });
         }

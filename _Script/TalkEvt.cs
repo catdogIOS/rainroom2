@@ -328,7 +328,7 @@ async void csvvreader()
             checkach();//업적체크
             lovetalk();
             Text_obj.text = "";        
-            if (text_str.Contains("^"))
+            if (text_str.Contains("Z"))
             { //질문이 있는경우
                 lineStr = text_str.ToString().Split('|'); // 0:질문 1:대답버튼 2:1번의 대답 3:대답버튼 4:3번의 대답  
                 StartCoroutine(questionTalkRun());

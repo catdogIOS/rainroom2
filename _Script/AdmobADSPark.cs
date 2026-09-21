@@ -106,8 +106,10 @@ public class AdmobADSPark : MonoBehaviour {
 
     void giveMeReward()
     {
-        se_back.mute = false;
-        se_back2.mute = false;
+        if(SoundHandler.instance != null)
+        {
+            SoundHandler.instance.SetMute(false);
+        }
         Toast_obj.SetActive(true);
         Toast_txt.text = "대화 횟수가 5로 다시 복구되었다.";
         StopCoroutine("ToastImgFadeOut");
@@ -153,8 +155,10 @@ public class AdmobADSPark : MonoBehaviour {
 
             if (rewardedAd != null&& rewardedAd.CanShowAd())
             {
-                se_back.mute = true;
-                se_back2.mute = true;
+        if(SoundHandler.instance != null)
+        {
+            SoundHandler.instance.SetMute(true);
+        }
                 rewardedAd.Show((Reward reward) =>
                 {
                     PlayerPrefs.SetInt("talk", 5);
@@ -250,12 +254,16 @@ public class AdmobADSPark : MonoBehaviour {
         //Debug.Log("상태보기 : " + rewardedInterstitialAd);
         if (rewardedInterstitialAd != null&& rewardedInterstitialAd.CanShowAd())
         {
-                se_back.mute = true;
-                se_back2.mute = true;
+        if(SoundHandler.instance != null)
+        {
+            SoundHandler.instance.SetMute(true);
+        }
             rewardedInterstitialAd.Show((Reward reward) =>
             {
-            se_back.mute = false;
-            se_back2.mute = false;
+        if(SoundHandler.instance != null)
+        {
+            SoundHandler.instance.SetMute(false);
+        }
             });
         }
         else

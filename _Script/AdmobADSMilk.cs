@@ -95,8 +95,10 @@ public class AdmobADSMilk : MonoBehaviour {
         PlayerPrefs.SetInt("wait", 1);
         if (rewardedAd != null && rewardedAd.CanShowAd())
         {
-                se_back.mute = true;
-                se_back2.mute = true;
+        if(SoundHandler.instance != null)
+        {
+            SoundHandler.instance.SetMute(true);
+        }
             rewardedAd.Show((Reward reward) =>
             {
                 //Toast_contain3.SetActive(true);
@@ -106,8 +108,11 @@ public class AdmobADSMilk : MonoBehaviour {
                 Toast_obj2.SetActive(true);
                 GM.GetComponent<WindowMiniGame>().MilkYes();
                 PlayerPrefs.SetInt("setmilkadc", 1);
-            se_back.mute = false;
-            se_back2.mute = false;
+        
+        if(SoundHandler.instance != null)
+        {
+            SoundHandler.instance.SetMute(false);
+        }
             });
         }
         else
