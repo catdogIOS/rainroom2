@@ -30,18 +30,6 @@ public class AdmobADS : MonoBehaviour {
     public GameObject GM;
 
 
-    void Awake()
-    {
-        if (Application.internetReachability != NetworkReachability.NotReachable)
-        {
-        GoogleMobileAds.Mediation.UnityAds.Api.UnityAds.SetConsentMetaData("gdpr.consent", true);
-        GoogleMobileAds.Mediation.UnityAds.Api.UnityAds.SetConsentMetaData("privacy.consent", true);
-        }
-        else
-        {
-           // Debug.Log("No Internet, skip init for now 인터넷 연결되지않음");
-        }
-    }
 
     // Use this for initialization 앱 ID
     void Start () {
